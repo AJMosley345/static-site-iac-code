@@ -1,2 +1,2 @@
 # AMosley-IaCStaticSite
-IaC code for static site
+IaC for static site
