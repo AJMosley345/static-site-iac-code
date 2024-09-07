@@ -7,23 +7,18 @@ terraform {
   }
 }
 
-variable "api_token"{
-    type = string
-}
+variable "api_token"{}
 
-variable "zone_id"{
-    type = string
-}
+variable "zone_id"{}
 
 provider "cloudflare" {
   api_token = var.api_token
 }
 
-
-resource "cloudflare_record" "www" {
+resource "cloudflare_record" "lightsail_instance" {
     zone_id = var.zone_id
-    name    = "testing"
-    content   = "10.0.0.1"
+    name    = "ajmosley.com"
+    content   = "100.29.71.200"
     type    = "A"
     proxied = true
 }
