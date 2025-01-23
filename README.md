@@ -1,9 +1,10 @@
 # AMosley-IaCStaticSite
-IaC (Infrastructure as Code) for my static site. Using AWS Lightsail for the VPS instance, Terraform and Ansible for configuration and infrastructure, then (insert Static Site Generator here) to generate the site.
+IaC for my static site. Using *{cloud provider}* for the VM instance, Terraform and Ansible for provisioning and configuration, then *{static site generator}* to generate the site.
 
 # Stack
-- AWS (VPS Provider)
+- {cloud provider} (VM Provider)
 - Cloudflare (DNS Provider)
+- Porkbun (Domain Name Provider)
 - Terraform (Provisioning of resources and creation)
 - Ansible (Automated configuration and updating)
 - *Static Site Generator*
