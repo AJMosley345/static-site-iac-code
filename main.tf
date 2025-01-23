@@ -7,11 +7,8 @@ resource "porkbun_nameservers" "cloudflare_nameservers" {
    ]
 }
 
-# Provisions a server in Hetzner cloud, gives it a primary ip and an ssh-key for the current user (this can only really be run locally)
-# resource "hcloud_ssh_key" "ssh_key" {
-#   name = "WSL Key"
-#   public_key = file("~/.ssh/id_ed25519_hetzner.pub")
-# }
+# Provisions a server in Hetzner cloud, and gives it a primary ip to be passed to Cloudflare
+
 resource "hcloud_primary_ip" "main" {
   name = "primary_ip"
   datacenter = "us-east"
@@ -24,7 +21,7 @@ resource "hcloud_server" "static_site" {
   image = "ubuntu-24.04"
   server_type = "cpx11"
   datacenter = "us-east"
-  # ssh_keys = [ "WSL Key" ]
+  user_data = file("./cloud-init/cloud-init.yaml")
   public_net {
     ipv4 = hcloud_primary_ip.main.id
   }
