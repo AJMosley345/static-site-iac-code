@@ -1,8 +1,8 @@
 name: Full Server Setup (Runs bootstrap-ansible and bootstrap-server)
 
 on:
-#   repository_dispatch:
-#     types: [bootstrap]
+  repository_dispatch:
+    types: [bootstrap]
     workflow_dispatch:
 
 jobs:

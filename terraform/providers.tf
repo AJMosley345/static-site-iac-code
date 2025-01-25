@@ -1,4 +1,11 @@
 terraform {
+  cloud {
+    organization = "AJMosley"
+    workspaces {
+      name = "static-site-iac-code"
+    }
+  }
+  required_version = ">= 1.1.0"
   required_providers {
     porkbun = {
       source = "kyswtn/porkbun"
