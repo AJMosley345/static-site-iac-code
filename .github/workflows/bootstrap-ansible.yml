@@ -1,9 +1,8 @@
 name: Bootstrap ansible on cloud server
 
 on:
-#   repository_dispatch:
-#     types: [bootstrap]
-    workflow_dispatch:
+  workflow_call:
+  workflow_dispatch:
 
 jobs:
   bootstrap:
