@@ -1,8 +1,7 @@
 ---
 - name: Bootstrap ansible for configuration
-  hosts: localhost
-  connection: local
+  hosts: all
   gather_facts: false
-
+  
   roles:
     - bootstrap
