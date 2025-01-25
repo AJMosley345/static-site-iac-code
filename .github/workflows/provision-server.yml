@@ -22,11 +22,11 @@ jobs:
     # Uploads the Terraform configuration to HCP Terraform and marks it as speculative so it cannot modify infrastructure.
     - name: Upload Configuration
       uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
-      env:
-        TF_CLOUD_ORGANIZATION: ${{ env.TF_CLOUD_ORGANIZATION }}
-        TF_API_TOKE: ${{ secrets.TF_API_TOKEN }}
-        TF_WORKSPACE: ${{ env.TF_WORKSPACE }}
-        CONFIG_DIRECTORY: ""./terraform"
+      # env:
+      #   TF_CLOUD_ORGANIZATION: ${{ env.TF_CLOUD_ORGANIZATION }}
+      #   TF_API_TOKE: ${{ secrets.TF_API_TOKEN }}
+      #   TF_WORKSPACE: ${{ env.TF_WORKSPACE }}
+      #   CONFIG_DIRECTORY: ""./terraform"
       id: plan-upload
       with:
         workspace: ${{ env.TF_WORKSPACE }}
