@@ -8,8 +8,8 @@ resource "porkbun_nameservers" "cloudflare_nameservers" {
 }
 
 # Provisions a server in Hetzner cloud, and gives it a primary ip to be passed to Cloudflare. Also creates an ssh key resource
-resource "hcloud_ssh_key" "aj_local_machine" {
-  name = "aj_local_machine"
+resource "hcloud_ssh_key" "local_machine" {
+  name = "local_machine"
   public_key = file("./.ssh/hetzner_local_machine.pub")
 }
 
