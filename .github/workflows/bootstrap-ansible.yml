@@ -60,4 +60,5 @@ jobs:
           # Optional, additional flags to pass to ansible-playbook
           options: |
               --verbose
-              -u amosley
+              -u ansible
+              --private-key-file=${{ secrets.ANSIBLE_USER_SSH_PRIVATE_KEY }}
