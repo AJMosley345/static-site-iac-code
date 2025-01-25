@@ -1,0 +1,33 @@
+#cloud-config
+# Creates the users amosley and ansible. amosley for admin tasks and ansible to run the ansible playbooks to fully setup the server
+users:
+  - name: amosley
+    groups: users, admin
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF1TzYGftp6/UvRnOZ0GKUg9nPF9pkaaeXbc+QbPQiI2 aj@amosley-desktop
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDe1r5rFEsOT7NsRhfmouf5VaPeujou+l9/zbcDjVmSCBuBuucRNcDS4isbG143+eOTxGNTT8Jqqr1BZi8rTf63sBSuGGU1NKv/FB+hTE+P7aMFsncRS313OqhBwCvAb7CB0QEHfBntNpVVIkpLcIS+JUWINd7CGLbDKr9PPAiT7OAnNeLkAI9OiRXARIsQdeg/VKVtd+G8lJ/FOsCT+RGsEUZO6Qw83W1j5QoOIMzFWDRwpRitHuz/VLwTuMa0hKNbVumR86RX8H+BGkl52Kio2buJoySqQiYsaqKy7vrguna3MwWWPj3dBexGPEBYI6GOhnq2LEx+hBh0y8L8rodBGWkfl4co1dTXIyAif0gAenXA2UJHVhDk6r8/1umYfOH6+bUKtnub4hRjepsCLXQSn3rnx1r5Hez0QzX/HVr8CdvHtBghYE598aeXwpDG+78JrBQCNr55bzPL6VV065kYV6tqYeJsAN+YnK+Rqqk9tOKWlN27KhnXBNhb8pYNl04A5sfodYh0xlo9ScGbMrlXqSnqhtzDK36clfe1oY9qR1utsQ6HwSOfbPUjsBwHJ35dvp4bcsT9GB8j0gOd8+vc7B0+H4HW19LNi/D8rJ29GeecG3sWxcs/Vmf96O4G4/CrANK9tDevtDuHGbWPOl8kOx3uD9/wylitdK1KBqVatw== amosley@am-static-site
+  - name: ansible
+    groups: users, admin
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINLo35q0WX/c3ulmxvLo8A9j2pmZHxIZiDwxYWQVaRib ansible@am-static-site
+
+# Do the SSH hardening before bootstrapping to allow ssh key access only
+runcmd:
+  - sed -i -e '/^\(#\|\)PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config
+  - sed -i -e '/^\(#\|\)PasswordAuthentication/s/^.*$/PasswordAuthentication no/' /etc/ssh/sshd_config
+  - sed -i -e '/^\(#\|\)KbdInteractiveAuthentication/s/^.*$/KbdInteractiveAuthentication no/' /etc/ssh/sshd_config
+  - sed -i -e '/^\(#\|\)ChallengeResponseAuthentication/s/^.*$/ChallengeResponseAuthentication no/' /etc/ssh/sshd_config
+  - sed -i -e '/^\(#\|\)MaxAuthTries/s/^.*$/MaxAuthTries 2/' /etc/ssh/sshd_config
+  - sed -i -e '/^\(#\|\)AllowTcpForwarding/s/^.*$/AllowTcpForwarding no/' /etc/ssh/sshd_config
+  - sed -i -e '/^\(#\|\)X11Forwarding/s/^.*$/X11Forwarding no/' /etc/ssh/sshd_config
+  - sed -i -e '/^\(#\|\)AllowAgentForwarding/s/^.*$/AllowAgentForwarding no/' /etc/ssh/sshd_config
+  - sed -i -e '/^\(#\|\)AuthorizedKeysFile/s/^.*$/AuthorizedKeysFile .ssh\/authorized_keys/' /etc/ssh/sshd_config
+  - sed -i '$a AllowUsers amosley ansible' /etc/ssh/sshd_config
+  # - curl -X POST -H 'Content-Type: application/json' \
+  #     -d '{"status": "ready"}' \
+  #     https://api.github.com/${var.repo_name}/actions/workflows/bootstrap.yml/dispatches \
+  #     -H "Authorization: token ${data.hcp_vault_secrets_secret.github_pa_token.secret_value}"
