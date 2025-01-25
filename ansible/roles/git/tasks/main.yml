@@ -13,7 +13,7 @@
 - name: Initialize bare Git repository
   ansible.builtin.git:
     repo: "{{ repo_path }}"
-    bare: yes
+    bare: true
 
 - name: Add Git post-receive hook
   ansible.builtin.copy:

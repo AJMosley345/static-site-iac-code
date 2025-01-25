@@ -28,6 +28,7 @@
       [sshd]
       enabled = true
       banaction = iptables-multiport
+    mode: preserve
   notify: Restart Fail2Ban
 
 - name: Enable Fail2Ban service

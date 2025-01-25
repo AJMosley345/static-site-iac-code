@@ -1,11 +1,10 @@
 # This must be the first task for bootstrapping!
-# 
 # If requiretty is set on the remote host, the bootstrapping itself will
 # fail because of pipelining.  Instead, we force the use of paramiko, which
 # does not do pipelining.  Alternatively, we could remove the paramiko
 # connection specification, but then users would have to run:
 #   ANSIBLE_SSH_PIPELINING=0 ansible-playbook playbooks/bootstrap.yaml ...
-- name: remove requiretty from sudoers
+- name: Remove requiretty from sudoers
   connection: paramiko
   ansible.builtin.lineinfile:
     path: /etc/sudoers
@@ -14,11 +13,11 @@
     validate: /usr/sbin/visudo -cf %s
   when: ansible_connection != "local"
 
-- name: explicitly gather facts
-  setup:
+- name: Explicitly gather facts
+  ansible.builtin.setup:
 
-- name: install SELinux dependencies
-  yum:
+- name: Install SELinux dependencies
+  ansible.builtin.dnf:
     name: "{{ bootstrap_packages }}"
     state: present
   vars:
@@ -32,7 +31,7 @@
 # NOTE: installed), then the user MUST specify a become_method on the command
 # NOTE: line for this role to work at all, so it doesn't really matter when
 # NOTE: this particular task is run.
-- name: install sudo
+- name: Install sudo
   ansible.builtin.apt:
     name: sudo
     state: present
@@ -40,16 +39,16 @@
     force_apt_get: true
   when: ansible_facts["os_family"] == "Debian"
 
-- name: allow ansible user to have passwordless sudo
-  lineinfile:
+- name: Allow ansible user to have passwordless sudo
+  ansible.builtin.lineinfile:
     path: /etc/sudoers.d/ansible
     line: "ansible ALL=(ALL) NOPASSWD: ALL"
     # Older systems require this to be 0440 or sudo breaks.
-    mode: 0440
+    mode: "0440"
     create: true
     validate: /usr/sbin/visudo -cf %s
 
-- name: add ansible user and set groups
+- name: Add ansible user and set groups
   ansible.builtin.user:
     name: ansible
     # On RedHat systems, we put the ansible user in the wheel group to
@@ -60,7 +59,7 @@
       "{{ 'wheel' if ansible_facts['os_family'] == 'RedHat' else '' }}"
     home: "/home/ansible"
 
-- name: create ansible's authorized_keys
+- name: Create ansible's authorized_keys
   become: true
   become_user: "{{ 'root' if ansible_check_mode else 'ansible' }}"
   ansible.posix.authorized_key:
@@ -71,7 +70,7 @@
     exclusive: true
 
 # This must be after setting up passwordless sudo and the authorized_keys.
-- name: remove ansible's password
-  user:
+- name: Remove ansible's password
+  ansible.builtin.user:
     name: ansible
     password: "*"
