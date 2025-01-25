@@ -1,13 +1,7 @@
-name: Provision Hetzner server, set nameservers in Porkbun and create DNS records in Cloudflare
+name: Provision Hetzner server, set nameservers in Porkbun and create DNS records in Cloudflare'
 
 on:
   workflow_dispatch:
-
-env:
-  TF_CLOUD_ORGANIZATION: ${{ env.TF_CLOUD_ORGANIZATION }}
-  TF_API_TOKE: ${{ secrets.TF_API_TOKEN }}
-  TF_WORKSPACE: ${{ env.TF_WORKSPACE }}
-  CONFIG_DIRECTORY: ""./terraform"
 
 permissions:
   contents: read
@@ -17,7 +11,11 @@ jobs:
   terraform:
     name: 'Terraform Plan'
     runs-on: ubuntu-latest
-
+    env:
+      TF_CLOUD_ORGANIZATION: ${{ env.TF_CLOUD_ORGANIZATION }}
+      TF_API_TOKE: ${{ secrets.TF_API_TOKEN }}
+      TF_WORKSPACE: ${{ env.TF_WORKSPACE }}
+      CONFIG_DIRECTORY: ""./terraform"
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
