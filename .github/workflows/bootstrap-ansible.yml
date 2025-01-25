@@ -36,6 +36,14 @@ jobs:
       - name: Add Ansible to PATH
         run: echo "$(python -m site --user-base)/bin" >> $GITHUB_PATH
 
+
+      - name: Create ansible user ssh private key
+        uses: mobiledevops/secret-to-file-action@v1.0.0
+        with:
+          base64-encoded-secret: ${{ secrets.ANSIBLE_USER_SSH_PRIVATE_KEY_B64 }}
+          filename: "ansible.key"
+          working-directory: "./ansible"
+
       - name: Run playbook
         uses: dawidd6/action-ansible-playbook@v2
         env:
@@ -61,4 +69,4 @@ jobs:
           options: |
               --verbose
               -u ansible
-              --private-key-file=${{ secrets.ANSIBLE_USER_SSH_PRIVATE_KEY }}
+              --private-key-file=ansible.key
