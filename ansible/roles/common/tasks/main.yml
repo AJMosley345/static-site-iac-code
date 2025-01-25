@@ -49,17 +49,3 @@
   community.general.ufw:
     state: enabled
 
-- name: Install mdBook globally
-  community.general.cargo:
-    name: mdbook
-    executable: /usr/local/bin/mdbook
-
-- name: Install mdBook-generate-summary plugin globally
-  community.general.cargo:
-    name: mdbook-generate-summary
-    executable: /usr/local/bin/mdbook-generate-summary
-
-- name: Install mdBook-chapter-path plugin globally
-  community.general.cargo:
-    name: mdbook-chapter-path
-    executable: /usr/local/bin/mdbook-chapter-path

@@ -1,0 +1,8 @@
+---
+- name: Install mdBook
+  community.general.cargo:
+    name: "{{ item }}"
+  loop:
+    - mdbook
+    - mdbook-generate-summary
+    - mdbook-chapter-path
