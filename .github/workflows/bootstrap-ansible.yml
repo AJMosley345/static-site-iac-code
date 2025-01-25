@@ -21,9 +21,9 @@ jobs:
           path: ./ansible/ansible.cfg
       
       - name: Set up Python and install Ansible
-          uses: actions/setup-python@v4
-          with:
-            python-version: '3.12'
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
   
       - name: Install Ansible via pip and install hetzner.hcloud dependencies
         run: |
