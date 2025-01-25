@@ -56,7 +56,7 @@ jobs:
           # Optional, ansible configuration file content (ansible.cfg)
           configuration: '${{ steps.ansible_config.outputs.contents }}'
           # Optional, SSH private key
-          key: ${{ secrets.ANSIBLE_USER_SSH_PRIVATE_KEY }}
+          # key: ${{ secrets.ANSIBLE_USER_SSH_PRIVATE_KEY }}
           # Optional, literal inventory file contents
           # inventory:
           # Optional, SSH known hosts file content
