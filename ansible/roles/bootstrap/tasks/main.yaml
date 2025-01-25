@@ -66,7 +66,7 @@
     user: ansible
     path: "/home/ansible/.ssh/authorized_keys"
     key: |
-      {{ lookup('file', 'ansible.ed25519.key.pub') }}
+      {{ lookup('file', 'hetzner_ansible.pub') }}
     exclusive: true
 
 # This must be after setting up passwordless sudo and the authorized_keys.
