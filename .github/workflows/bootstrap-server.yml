@@ -28,7 +28,7 @@ jobs:
           # Optional, directory where playbooks live
           directory: ./ansible/
           # Optional, ansible configuration file content (ansible.cfg)
-          configuration: "${ steps.ansible_config.outputs.contents }"
+          configuration: '${ steps.ansible_config.outputs.contents }'
           # Optional, SSH private key
           key: ${{ secrets.ANSIBLE_USER_SSH_PRIVATE_KEY }}
           # Optional, literal inventory file contents
