@@ -21,7 +21,6 @@ resource "hcloud_primary_ip" "am_static_site_ip" {
   auto_delete = false
 }
 
-
 # Get github personal access token from HCP Vault Secrets to use in the cloud init
 data "hcp_vault_secrets_secret" "github_pa_token" {
   app_name = var.hcp_app_name

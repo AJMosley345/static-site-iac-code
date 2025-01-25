@@ -1,4 +1,4 @@
-name: 'Provision Hetzner server, set nameservers in Porkbun and create DNS records in Cloudflare'
+name: Provision Hetzner server, set nameservers in Porkbun and create DNS records in Cloudflare
 
 on:
   workflow_dispatch:

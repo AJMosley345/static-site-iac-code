@@ -22,24 +22,25 @@ jobs:
 
       - name: Run playbook
         uses: dawidd6/action-ansible-playbook@v2
-        # Required, playbook filepath
-        playbook: playbooks/bootstrap-ansible.yml
-        # Optional, directory where playbooks live
-        directory: ./ansible/
-        # Optional, ansible configuration file content (ansible.cfg)
-        configuration: "${ steps.ansible_config.outputs.contents }"
-        # Optional, SSH private key
-        key: ${{ secrets.ANSIBLE_USER_SSH_PRIVATE_KEY }}
-        # Optional, literal inventory file contents
-        # inventory:
-        # Optional, SSH known hosts file content
-        # known_hosts:
-        # Optional, encrypted vault password
-        # vault_password: ${{secrets.VAULT_PASSWORD}}
-        # Optional, galaxy requirements filepath
-        requirements: requirements.yml
-        # Optional, additional flags to pass to ansible-playbook
-        options: |
-            --verbose
-        env:
-          ANSIBLE_HOST_KEY_CHECKING: "false"
+        with:
+          # Required, playbook filepath
+          playbook: playbooks/bootstrap-ansible.yml
+          # Optional, directory where playbooks live
+          directory: ./ansible/
+          # Optional, ansible configuration file content (ansible.cfg)
+          configuration: "${ steps.ansible_config.outputs.contents }"
+          # Optional, SSH private key
+          key: ${{ secrets.ANSIBLE_USER_SSH_PRIVATE_KEY }}
+          # Optional, literal inventory file contents
+          # inventory:
+          # Optional, SSH known hosts file content
+          # known_hosts:
+          # Optional, encrypted vault password
+          # vault_password: ${{secrets.VAULT_PASSWORD}}
+          # Optional, galaxy requirements filepath
+          requirements: requirements.yml
+          # Optional, additional flags to pass to ansible-playbook
+          options: |
+              --verbose
+          env:
+            ANSIBLE_HOST_KEY_CHECKING: "false"
