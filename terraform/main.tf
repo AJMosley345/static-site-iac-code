@@ -37,7 +37,7 @@ resource "hcloud_server" "am_static_site" {
   image = "ubuntu-24.04"
   server_type = "cpx11"
   datacenter = "ash-dc1"
-  user_data = <<-EOT
+  user_data = <<EOT
 #cloud-config
 # Creates the users amosley and ansible. amosley for admin tasks and ansible to run the ansible playbooks to fully setup the server
 users:
@@ -55,8 +55,18 @@ users:
     ssh_authorized_keys:
       - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINLo35q0WX/c3ulmxvLo8A9j2pmZHxIZiDwxYWQVaRib ansible@am-static-site
 
-# Trigger webhook to GitHub Actions after setup
+# TDo the SSH hardening before bootstrapping to allow ssh key access only
 runcmd:
+  - sed -i -e '/^\(#\|\)PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config
+  - sed -i -e '/^\(#\|\)PasswordAuthentication/s/^.*$/PasswordAuthentication no/' /etc/ssh/sshd_config
+  - sed -i -e '/^\(#\|\)KbdInteractiveAuthentication/s/^.*$/KbdInteractiveAuthentication no/' /etc/ssh/sshd_config
+  - sed -i -e '/^\(#\|\)ChallengeResponseAuthentication/s/^.*$/ChallengeResponseAuthentication no/' /etc/ssh/sshd_config
+  - sed -i -e '/^\(#\|\)MaxAuthTries/s/^.*$/MaxAuthTries 2/' /etc/ssh/sshd_config
+  - sed -i -e '/^\(#\|\)AllowTcpForwarding/s/^.*$/AllowTcpForwarding no/' /etc/ssh/sshd_config
+  - sed -i -e '/^\(#\|\)X11Forwarding/s/^.*$/X11Forwarding no/' /etc/ssh/sshd_config
+  - sed -i -e '/^\(#\|\)AllowAgentForwarding/s/^.*$/AllowAgentForwarding no/' /etc/ssh/sshd_config
+  - sed -i -e '/^\(#\|\)AuthorizedKeysFile/s/^.*$/AuthorizedKeysFile .ssh\/authorized_keys/' /etc/ssh/sshd_config
+  - sed -i '$a AllowUsers amosley ansible' /etc/ssh/sshd_config
   - curl -X POST -H "Content-Type: application/json" \
       -d '{"status": "ready"}' \
       https://api.github.com/${var.repo_name}/actions/workflows/bootstrap.yml/dispatches \

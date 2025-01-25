@@ -49,30 +49,6 @@
   community.general.ufw:
     state: enabled
 
-- name: Harden SSH configuration
-  ansible.builtin.lineinfile:
-    path: /etc/ssh/sshd_config
-    state: present
-    regexp: "{{ item.regexp }}"
-    line: "{{ item.line }}"
-  loop:
-    - { regexp: '^#?PermitRootLogin', line: 'PermitRootLogin no' }
-    - { regexp: '^#?PasswordAuthentication', line: 'PasswordAuthentication no' }
-    - { regexp: '^#?KbdInteractiveAuthentication', line: 'KbdInteractiveAuthentication no' }
-    - { regexp: '^#?ChallengeResponseAuthentication', line: 'ChallengeResponseAuthentication no' }
-    - { regexp: '^#?MaxAuthTries', line: 'MaxAuthTries 2' }
-    - { regexp: '^#?AllowTcpForwarding', line: 'AllowTcpForwarding no' }
-    - { regexp: '^#?X11Forwarding', line: 'X11Forwarding no' }
-    - { regexp: '^#?AllowAgentForwarding', line: 'AllowAgentForwarding no' }
-    - { regexp: '^#?AuthorizedKeysFile', line: 'AuthorizedKeysFile .ssh/authorized_keys' }
-
-- name: Allow specific SSH users
-  ansible.builtin.lineinfile:
-    path: /etc/ssh/sshd_config
-    line: "AllowUsers amosley ansible"
-    state: present
-  notify: Restart SSH
-
 - name: Install mdBook globally
   community.general.cargo:
     name: mdbook
