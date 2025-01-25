@@ -1,0 +1,13 @@
+name: Full Server Setup (Runs bootstrap-ansible and bootstrap-server)
+
+on:
+#   repository_dispatch:
+#     types: [bootstrap]
+    workflow_dispatch:
+
+jobs:
+  bootstrap_ansible:
+    uses: ajmosley345/static-site-iac-code/.github/workflows/bootstrap-ansible.yml@main
+
+  bootstrap_server:
+    uses: ajmosley345/static-site-iac-code/.github/workflows/bootstrap-server.yml@main

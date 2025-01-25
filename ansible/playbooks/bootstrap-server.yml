@@ -1,0 +1,7 @@
+---
+- name: Bootstrap Cloud Server
+  hosts: all
+  
+  roles:
+    - common
+    - nginx

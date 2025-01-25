@@ -1,0 +1,4 @@
+---
+domain: ajmosley.com
+repo_path: /var/repos/{{ domain }}.git
+www_path: /var/www/{{ domain }}
