@@ -42,5 +42,3 @@ jobs:
           # Optional, additional flags to pass to ansible-playbook
           options: |
               --verbose
-          env:
-            ANSIBLE_HOST_KEY_CHECKING: "false"
