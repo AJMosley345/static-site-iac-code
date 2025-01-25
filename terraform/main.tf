@@ -63,7 +63,7 @@ runcmd:
       -H "Authorization: token ${data.hcp_vault_secrets_secret.github_pa_token.secret_value}"
 EOT
 
-  ssh_keys = [ hcloud_ssh_key.aj_local_machine.id, hcloud_ssh_key.ansible.id  ]
+  ssh_keys = [ hcloud_ssh_key.local_machine.id, hcloud_ssh_key.ansible.id  ]
   labels = {
     "role" : "webserver",
     "ssh_ip": hcloud_primary_ip.am_static_site_ip.ip_address
