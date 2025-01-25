@@ -42,13 +42,14 @@ users:
     sudo: ALL=(ALL) NOPASSWD:ALL
     shell: /bin/bash
     ssh_authorized_keys:
-      ${join("\n  - ", var.user_public_keys)}
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDlrh+On+0qq3/bJcUfFLn3uD6pqp+iqX+gtp2zClBb4 aj@amosley-desktop
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDe1r5rFEsOT7NsRhfmouf5VaPeujou+l9/zbcDjVmSCBuBuucRNcDS4isbG143+eOTxGNTT8Jqqr1BZi8rTf63sBSuGGU1NKv/FB+hTE+P7aMFsncRS313OqhBwCvAb7CB0QEHfBntNpVVIkpLcIS+JUWINd7CGLbDKr9PPAiT7OAnNeLkAI9OiRXARIsQdeg/VKVtd+G8lJ/FOsCT+RGsEUZO6Qw83W1j5QoOIMzFWDRwpRitHuz/VLwTuMa0hKNbVumR86RX8H+BGkl52Kio2buJoySqQiYsaqKy7vrguna3MwWWPj3dBexGPEBYI6GOhnq2LEx+hBh0y8L8rodBGWkfl4co1dTXIyAif0gAenXA2UJHVhDk6r8/1umYfOH6+bUKtnub4hRjepsCLXQSn3rnx1r5Hez0QzX/HVr8CdvHtBghYE598aeXwpDG+78JrBQCNr55bzPL6VV065kYV6tqYeJsAN+YnK+Rqqk9tOKWlN27KhnXBNhb8pYNl04A5sfodYh0xlo9ScGbMrlXqSnqhtzDK36clfe1oY9qR1utsQ6HwSOfbPUjsBwHJ35dvp4bcsT9GB8j0gOd8+vc7B0+H4HW19LNi/D8rJ29GeecG3sWxcs/Vmf96O4G4/CrANK9tDevtDuHGbWPOl8kOx3uD9/wylitdK1KBqVatw== amosley@am-static-site
   - name: ansible
     groups: users, admin
     sudo: ALL=(ALL) NOPASSWD:ALL
     shell: /bin/bash
     ssh_authorized_keys:
-      ${join("\n  - ", var.ansible_public_keys)}
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICr9AMYiECybeh/RWnP+AOBcRrAJh2Qk+VRz2rxcJMYI ansible@am-static-site
 
 # Trigger webhook to GitHub Actions after setup
 runcmd:

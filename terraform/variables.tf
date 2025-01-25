@@ -13,14 +13,6 @@ variable "hcp_app_name" {
 variable "domain" {
   type = string
 }
-variable "ansible_public_keys" {
-  type = list(string)
-  sensitive = true
-}
-variable "user_public_keys" {
-  type = list(string)
-  sensitive = true
-}
 variable "repo_name" {
   description = "Name of the repo to use the command on in the form of repo/your-repo"
   type = string
