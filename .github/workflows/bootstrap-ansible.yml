@@ -24,9 +24,9 @@ jobs:
         uses: dawidd6/action-ansible-playbook@v2
         with:
           # Required, playbook filepath
-          playbook: playbooks/bootstrap-ansible.yml
+          playbook: bootstrap-ansible.yml
           # Optional, directory where playbooks live
-          directory: ./ansible/
+          directory: ./ansible/playbooks
           # Optional, ansible configuration file content (ansible.cfg)
           configuration: '${{ steps.ansible_config.outputs.contents }}'
           # Optional, SSH private key
