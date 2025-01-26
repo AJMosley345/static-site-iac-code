@@ -30,22 +30,21 @@ resource "hcloud_primary_ip" "am_static_site_ip" {
 }
 
 # Get github personal access token from HCP Vault Secrets to use in the cloud init
-# data "hcp_vault_secrets_secret" "github_pa_token" {
-#   app_name = var.hcp_app_name
-#   secret_name = "github_pa_token"
-# }
-# locals {
-#   ssh_key_name = format("%s_%s", "hetzner", var.ansible_user)
-#   ansible_ssh_key = hcloud_ssh_key.keys[local.ssh_key_name].public_key
-# }
-# data "template_cloudinit_config" "cloud_config" {
-#   part {
-#     filename = "cloud-config.yaml"
-#     content_type = "text/cloud-config"
-#     content = file("cloud-init/cloud-init.yml")
-#   }
-# }
-
+data "hcp_vault_secrets_secret" "github_pa_token" {
+  app_name = var.hcp_app_name
+  secret_name = "github_pa_token"
+}
+locals {
+  ssh_key_name = format("%s_%s", "hetzner", var.ansible_user)
+  ansible_ssh_key = hcloud_ssh_key.keys[local.ssh_key_name].public_key
+}
+data "template_cloudinit_config" "cloud_config" {
+  part {
+    filename = "cloud-config.yaml"
+    content_type = "text/cloud-config"
+    content = file("cloud-init/cloud-init.yml")
+  }
+}
 
 resource "hcloud_server" "am_static_site" {
   name = var.server_name
