@@ -34,20 +34,48 @@ data "hcp_vault_secrets_secret" "github_pa_token" {
   app_name = var.hcp_app_name
   secret_name = "github_pa_token"
 }
-data "template_cloudinit_config" "cloud_config" {
-  part {
-    filename = "cloud-config.yaml"
-    content_type = "text/cloud-config"
-    content = file("cloud-init/cloud-init.yml")
-  }
-}
 
 resource "hcloud_server" "am_static_site" {
   name = var.server_name
   image = var.os_image
   server_type = var.server_type
   datacenter = var.datacenter
-  user_data = data.template_cloudinit_config.cloud_config.rendered
+  user_data = <<EOT
+#cloud-config
+# Creates the user ansible for configuration with ansible playbooks
+name: ansible
+groups: users, admin
+sudo: ALL=(ALL) NOPASSWD:ALL
+shell: /bin/bash
+ssh_authorized_keys:
+  - ${var.ansible_ssh_key}
+
+# Writes the ssh hardening config to a separate file for better management
+write_files:
+  path: /etc/ssh/sshd_config.d/hardening.conf
+  content: |
+    PermitRootLogin no
+    PasswordAuthentication no
+    KbdInteractiveAuthentication no
+    ChallengeResponseAuthentication no
+    MaxAuthTries 2
+    AllowTcpForwarding no
+    X11Forwarding no
+    AllowAgentForwarding no
+    AuthorizedKeysFile .ssh/authorized_keys
+    AllowUsers ${var.personal_user} ansible
+
+# Webhook to call bootstrap-server workflow
+runcmd:
+  - >
+    curl -L \
+      -X POST \
+      -H "Accept: application/vnd.github+json" \
+      -H "Authorization: Bearer ${data.hcp_vault_secrets_secret.github_pa_token.secret_value}" \
+      -H "X-GitHub-Api-Version: 2022-11-28" \
+      https://api.github.com/repos/${var.repo_name}/actions/workflows/${var.workflow_id}/dispatches \
+      -d '{"event_type": "ready"}'
+EOT
   ssh_keys = [ for key in hcloud_ssh_key.keys : key.name  ]
   labels = {
     "role" : "webserver",
