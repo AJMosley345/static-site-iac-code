@@ -68,10 +68,14 @@ runcmd:
   - sed -i -e '/^\(#\|\)AuthorizedKeysFile/s/^.*$/AuthorizedKeysFile .ssh\/authorized_keys/' /etc/ssh/sshd_config
   - sed -i '$a AllowUsers amosley ansible' /etc/ssh/sshd_config
   - >
-    curl -X POST -H "Content-Type: application/json" \
-      -d '{"event_type": "ready"}' \
-      https://api.github.com/${var.repo_name}/actions/workflows/server-setup.yml/dispatches \
-      -H "Authorization: token ${data.hcp_vault_secrets_secret.github_pa_token.secret_value}"
+    curl -L \
+      -X POST \
+      -H "Accept: application/vnd.github+json" \
+      -H "Authorization: Bearer ${data.hcp_vault_secrets_secret.github_pa_token.secret_value}" \
+      -H "X-GitHub-Api-Version: 2022-11-28" \
+      https://api.github.com/repos/${var.repo_name}/actions/workflows/${var.workflow_id}/dispatches \
+      -d '{"event_type": "ready"}'
+      
 EOT
   ssh_keys = [ hcloud_ssh_key.local_machine.id, hcloud_ssh_key.ansible.id  ]
   labels = {

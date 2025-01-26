@@ -17,3 +17,6 @@ variable "repo_name" {
   description = "Name of the repo to use the command on in the form of repo/your-repo"
   type = string
 }
+variable "workflow_id" {
+  type = string
+}

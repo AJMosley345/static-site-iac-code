@@ -2,7 +2,6 @@ name: Full Server Setup (Runs bootstrap-ansible and bootstrap-server)
 
 on:
   repository_dispatch:
-    types: [ready]
   workflow_dispatch:
 
 jobs:
@@ -10,6 +9,9 @@ jobs:
     name: Setup cloud server with ansible workflows
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Run bootstrap-ansible workflow
         uses: ./.github/workflows/bootstrap-ansible.yml@main
         env:
