@@ -85,7 +85,7 @@ runcmd:
       -H "Authorization: Bearer ${data.hcp_vault_secrets_secret.github_pa_token.secret_value}" \
       -H "X-GitHub-Api-Version: 2022-11-28" \
       https://api.github.com/repos/${var.repo_name}/actions/workflows/${var.workflow_id}/dispatches \
-      -d '{"event_type": "ready"}'
+      -d '{"ref": "main"}'
 EOT
   ssh_keys = [ for key in hcloud_ssh_key.keys : key.name  ]
   labels = {
