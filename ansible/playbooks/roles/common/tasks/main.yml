@@ -18,9 +18,8 @@
     - git
     - python3-pip
     - python3
-    - cargo
     - nginx
-    - rustup
+    - npm
 
 - name: Configure Fail2Ban
   ansible.builtin.copy:

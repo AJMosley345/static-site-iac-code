@@ -2,10 +2,11 @@
 - name: Bootstrap Cloud Server
   hosts: all
   become: true
-
+  become_user: root
+  
   roles:
     - bootstrap
     - common
     - git
     - nginx
-    - mdbook
+    - gatsby

@@ -31,7 +31,8 @@
       #!/bin/bash
       set -e
       GIT_WORK_TREE={{ git_www_path }} git checkout -f
-      mdbook build {{ git_www_path }}
+      npm run build
+      cp ./public/. {{ git_www_path }}
     mode: '0755'
     owner: amosley
     group: amosley
