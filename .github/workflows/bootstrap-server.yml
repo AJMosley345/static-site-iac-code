@@ -58,4 +58,4 @@ jobs:
           requirements: requirements.yml
           # Optional, additional flags to pass to ansible-playbook
           options: |
-              --vvvv
+              -vvvv
