@@ -52,13 +52,6 @@ variable "ip_type" {
   description = "Type of IP address to create (ipv4 or ipv6)"
   type = string
 }
-variable "ssh_keys" {
-  description = "SSH keys to create at Hetzner for access to the server"
-  type = map(object({
-    name = string
-    public_key = string
-  }))
-}
 variable "ansible_user" {
   description = "The name of the user whose SSH key will be added to the Cloud-Init configuration."
   type        = string
