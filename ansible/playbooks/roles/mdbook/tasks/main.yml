@@ -5,7 +5,7 @@
 
 - name: Install quickinstall to speed up the mdbook install
   community.general.cargo:
-    name: quickinstall
+    name: cargo-quickinstall
     path: /usr/local
 
 - name: Install mdBook
