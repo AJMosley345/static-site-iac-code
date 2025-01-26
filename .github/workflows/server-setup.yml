@@ -13,12 +13,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run bootstrap-ansible workflow
-        uses: ./.github/workflows/bootstrap-ansible.yml@main
+        uses: AJMosley345/static-site-iac-code/.github/workflows/bootstrap-ansible.yml@main
         env:
           HETZNER_API_TOKEN: ${{ secrets.HETZNER_API_TOKEN }}
 
       - name: Run bootstrap-server workflow
-        uses: ./.github/workflows/bootstrap-server.yml@main
+        uses: AJMosley345/static-site-iac-code/.github/workflows/bootstrap-server.yml@main
         env:
           HETZNER_API_TOKEN: ${{ secrets.HETZNER_API_TOKEN }}
           CLOUDFLARE_CERT: ${{ secrets.CLOUDFLARE_CERT }}
