@@ -34,10 +34,6 @@ data "hcp_vault_secrets_secret" "github_pa_token" {
   app_name = var.hcp_app_name
   secret_name = "github_pa_token"
 }
-locals {
-  ssh_key_name = format("%s_%s", "hetzner", var.ansible_user)
-  ansible_ssh_key = hcloud_ssh_key.keys[local.ssh_key_name].public_key
-}
 data "template_cloudinit_config" "cloud_config" {
   part {
     filename = "cloud-config.yaml"

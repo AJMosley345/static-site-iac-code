@@ -5,7 +5,7 @@ groups: users, admin
 sudo: ALL=(ALL) NOPASSWD:ALL
 shell: /bin/bash
 ssh_authorized_keys:
-  - ${local.ansible_ssh_key}
+  - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINLo35q0WX/c3ulmxvLo8A9j2pmZHxIZiDwxYWQVaRib ansible@am-static-site
 
 # Writes the ssh hardening config to a separate file for better management
 write_files:
