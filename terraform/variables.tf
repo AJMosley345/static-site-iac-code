@@ -64,7 +64,7 @@ variable "personal_user" {
   description = "The name of the user who will be created by ansible"
   type        = string
 }
-variable "ansible_ssh_key" {
+variable "ansible_user_ssh_key" {
   description = "Public key content for the ansible user"
   type = string
 }

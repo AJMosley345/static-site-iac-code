@@ -48,7 +48,7 @@ groups: users, admin
 sudo: ALL=(ALL) NOPASSWD:ALL
 shell: /bin/bash
 ssh_authorized_keys:
-  - ${var.ansible_ssh_key}
+  - ${var.ansible_user_ssh_key}
 
 # Writes the ssh hardening config to a separate file for better management
 write_files:
