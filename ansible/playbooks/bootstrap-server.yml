@@ -3,7 +3,7 @@
   hosts: all
 
   roles:
-    # - common
-    # - nginx
-    # - git
+    - common
+    - git
+    - nginx
     - mdbook

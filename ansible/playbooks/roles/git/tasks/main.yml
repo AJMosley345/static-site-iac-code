@@ -1,0 +1,37 @@
+---
+- name: Create directories for site and repository
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: amosley
+    group: amosley
+    mode: '0755'
+  loop:
+    - "{{ git_repo_path }}"
+    - "{{ git_www_path }}"
+
+- name: Initialize bare Git repository
+  ansible.builtin.command:
+    cmd: git init --bare {{ git_repo_path }}
+  args:
+    creates: ${{ git_repo_path }}
+
+- name: Set ownership of the Git repository
+  ansible.builtin.file:
+    path: ${{ git_repo_path }}
+    state: directory
+    owner: amosley
+    group: amosley
+    mode: '0755'
+
+- name: Add Git post-receive hook
+  ansible.builtin.copy:
+    dest: "{{ git_repo_path }}/hooks/post-receive"
+    content: |
+      #!/bin/bash
+      set -e
+      GIT_WORK_TREE={{ git_www_path }} git checkout -f
+      /bin/mdbook build -d {{ git_www_path }}
+    mode: '0755'
+    owner: amosley
+    group: amosley
