@@ -1,6 +1,7 @@
 ---
 - name: Bootstrap Cloud Server
   hosts: all
+  become: true
 
   roles:
     - common

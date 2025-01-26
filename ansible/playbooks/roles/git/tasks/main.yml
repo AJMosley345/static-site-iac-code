@@ -31,7 +31,7 @@
       #!/bin/bash
       set -e
       GIT_WORK_TREE={{ git_www_path }} git checkout -f
-      /bin/mdbook build -d {{ git_www_path }}
+      mdbook build {{ git_www_path }}
     mode: '0755'
     owner: amosley
     group: amosley

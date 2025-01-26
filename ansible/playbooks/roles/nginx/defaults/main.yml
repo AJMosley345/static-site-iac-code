@@ -1,2 +1,3 @@
 ---
 nginx_domain: ajmosley.com
+nginx_ssl_cert_path: /etc/ssl/

@@ -20,6 +20,7 @@
     - python3
     - cargo
     - nginx
+    - rustup
 
 - name: Configure Fail2Ban
   ansible.builtin.copy:

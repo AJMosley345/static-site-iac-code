@@ -39,6 +39,8 @@ jobs:
         uses: dawidd6/action-ansible-playbook@v2
         env:
           HETZNER_API_TOKEN: ${{ secrets.HETZNER_API_TOKEN }}
+          CLOUDFLARE_CERT: ${{ secrets.CLOUDFLARE_CERT }}
+          CLOUDFLARE_KEY: ${{ secrets.CLOUDFLARE_KEY }}
         with:
           # Required, playbook filepath
           playbook: playbooks/bootstrap-server.yml
