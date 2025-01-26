@@ -1,7 +1,0 @@
----
-- name: Bootstrap ansible for configuration
-  hosts: all
-  gather_facts: false
-
-  roles:
-    - bootstrap

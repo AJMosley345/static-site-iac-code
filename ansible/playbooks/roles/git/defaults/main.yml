@@ -1,4 +1,5 @@
 ---
+git_username: amosley
 git_domain: ajmosley.com
 git_repo_path: /var/repos/{{ git_domain }}.git
 git_www_path: /var/www/{{ git_domain }}

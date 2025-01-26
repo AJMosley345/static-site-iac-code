@@ -8,8 +8,8 @@ server {
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
-    ssl_certificate /etc/ssl/cloudflare.pem;
-    ssl_certificate_key /etc/ssl/cloudflare.key.pem;
+    ssl_certificate /etc/ssl/cloudflare_cert.pem;
+    ssl_certificate_key /etc/ssl/cloudflare_key.pem;
 
     server_name {{ nginx_domain }} www.{{ nginx_domain }};
 

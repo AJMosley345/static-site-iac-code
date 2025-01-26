@@ -23,6 +23,10 @@ terraform {
       source = "hashicorp/hcp"
       version = "0.101.0"
     }
+    template = {
+      source = "hashicorp/template"
+      version = "2.2.0"
+    }
   }
 }
 

@@ -3,14 +3,14 @@
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    owner: amosley
-    group: amosley
+    owner: ${{ git_username }}
+    group: ${{ git_username }}
     mode: '0755'
   loop:
     - "{{ git_repo_path }}"
     - "{{ git_www_path }}"
 
-- name: Initialize bare Git repository
+- name: Initialize bare Git repository  # noqa: command-instead-of-module # Suppresses lint rule about using command module when a module is available
   ansible.builtin.command:
     cmd: git init --bare {{ git_repo_path }}
   args:
@@ -20,8 +20,8 @@
   ansible.builtin.file:
     path: ${{ git_repo_path }}
     state: directory
-    owner: amosley
-    group: amosley
+    owner: ${{ git_username }}
+    group: ${{ git_username }}
     mode: '0755'
 
 - name: Add Git post-receive hook
@@ -30,9 +30,13 @@
     content: |
       #!/bin/bash
       set -e
-      GIT_WORK_TREE={{ git_www_path }} git checkout -f
+      GIT_REPO="{{ git_repo_path }}"
+      WORK_TREE="{{ git_www_path }}"
+      cd $GIT_REPO
+      GIT_WORK_TREE=$WORK_TREE git checkout -f
+      cd $WORK_TREE
+      npm install --production
       npm run build
-      cp ./public/. {{ git_www_path }}
     mode: '0755'
-    owner: amosley
-    group: amosley
+    owner: ${{ git_username }}
+    group: ${{ git_username }}

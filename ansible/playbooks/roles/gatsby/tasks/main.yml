@@ -1,0 +1,14 @@
+---
+- name: Install required Node.js version
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  when: ansible_os_family == "Debian"
+  loop:
+    - nodejs
+    - npm
+
+- name: Install Gatsby CLI globally
+  community.general.npm:
+    name: gatsby-cli
+    global: true

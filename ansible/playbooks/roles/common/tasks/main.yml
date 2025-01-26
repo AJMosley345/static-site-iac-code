@@ -1,4 +1,16 @@
 ---
+- name: Remove requiretty from sudoers
+  connection: paramiko
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers
+    state: absent
+    regexp: ^\s*Defaults\s+requiretty$
+    validate: /usr/sbin/visudo -cf %s
+  when: ansible_connection != "local"
+
+- name: Explicitly gather facts
+  ansible.builtin.setup:
+
 - name: Set hostname
   ansible.builtin.hostname:
     name: am-static-site
@@ -19,7 +31,6 @@
     - python3-pip
     - python3
     - nginx
-    - npm
 
 - name: Configure Fail2Ban
   ansible.builtin.copy:
@@ -48,3 +59,39 @@
 - name: Enable UFW
   community.general.ufw:
     state: enabled
+
+- name: Allow user to have passwordless sudo
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers.d/{{ common_username }}
+    line: "{{ common_username }} ALL=(ALL) NOPASSWD: ALL"
+    # Older systems require this to be 0440 or sudo breaks.
+    mode: "0440"
+    create: true
+    validate: /usr/sbin/visudo -cf %s
+
+- name: Create user
+  ansible.builtin.user:
+    name: ${{ common_username }}
+    groups:
+      "{{ 'wheel' if ansible_facts['os_family'] == 'RedHat' else '' }}"
+    shell: /bin/bash
+    home: "/home/{{ common_username }}"
+
+- name: Grant sudo privileges to user
+  ansible.builtin.copy:
+    dest: /etc/sudoers.d/{{ common_username }}
+    content: "{{ common_username }} ALL=(ALL) NOPASSWD:ALL\n"
+    owner: root
+    group: root
+    mode: '0440'
+  become: true
+
+- name: Create authorized_keys for user
+  become: true
+  become_user: 'root'
+  ansible.posix.authorized_key:
+    user: ${{ common_username }}
+    path: "/home/{{ common_username }}/.ssh/authorized_keys"
+    key: |
+      {{ lookup('file', 'common_username.pub') }}
+    exclusive: true

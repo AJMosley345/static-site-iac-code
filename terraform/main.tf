@@ -1,27 +1,30 @@
 # Sets nameservers of my domain to point to Cloudflare's on Porkbun
 resource "porkbun_nameservers" "cloudflare_nameservers" {
-  domain = "ajmosley.com"
-  nameservers = [ 
-    "evelyn.ns.cloudflare.com",
-    "anderson.ns.cloudflare.com"
-   ]
+  domain = var.domain
+  nameservers = var.porkbun_nameservers
 }
 
 # Provisions a server in Hetzner cloud, and gives it a primary ip to be passed to Cloudflare. Also creates an ssh key resource
-resource "hcloud_ssh_key" "local_machine" {
-  name = "local_machine"
-  public_key = file("./.ssh/hetzner_local_machine.pub")
+locals {
+  ssh_files = fileset(".ssh/", "*.pub")
+  ssh_keys = { for file in local.ssh_files : file => {
+      name = replace(file, ".pub", "")
+      public_key = file(".ssh/${file}")
+    }
+  }
 }
 
-resource "hcloud_ssh_key" "ansible" {
-  name = "ansible"
-  public_key = file("./.ssh/hetzner_ansible.pub")
+resource "hcloud_ssh_key" "keys" {
+  for_each = local.ssh_keys
+
+  name       = each.value.name
+  public_key = each.value.public_key
 }
 
 resource "hcloud_primary_ip" "am_static_site_ip" {
-  name = "am_static_site"
-  datacenter = "ash-dc1"
-  type = "ipv4"
+  name = var.server_name
+  datacenter = var.datacenter
+  type = var.ip_type
   assignee_type = "server"
   auto_delete = false
 }
@@ -31,53 +34,25 @@ data "hcp_vault_secrets_secret" "github_pa_token" {
   app_name = var.hcp_app_name
   secret_name = "github_pa_token"
 }
+locals {
+  ansible_ssh_key = hcloud_ssh_key.keys[var.ansible_user].public_key
+}
+data "template_cloudinit_config" "cloud_config" {
+  part {
+    filename = "cloud-config.yaml"
+    content_type = "text/cloud-config"
+    content = file("cloud-init/cloud-init.yml")
+  }
+}
+
 
 resource "hcloud_server" "am_static_site" {
-  name = "am-static-site"
-  image = "ubuntu-24.04"
-  server_type = "cpx11"
-  datacenter = "ash-dc1"
-  user_data = <<EOT
-#cloud-config
-# Creates the users amosley and ansible. amosley for admin tasks and ansible to run the ansible playbooks to fully setup the server
-users:
-  - name: amosley
-    groups: users, admin
-    sudo: ALL=(ALL) NOPASSWD:ALL
-    shell: /bin/bash
-    ssh_authorized_keys:
-      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF1TzYGftp6/UvRnOZ0GKUg9nPF9pkaaeXbc+QbPQiI2 aj@amosley-desktop
-      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDe1r5rFEsOT7NsRhfmouf5VaPeujou+l9/zbcDjVmSCBuBuucRNcDS4isbG143+eOTxGNTT8Jqqr1BZi8rTf63sBSuGGU1NKv/FB+hTE+P7aMFsncRS313OqhBwCvAb7CB0QEHfBntNpVVIkpLcIS+JUWINd7CGLbDKr9PPAiT7OAnNeLkAI9OiRXARIsQdeg/VKVtd+G8lJ/FOsCT+RGsEUZO6Qw83W1j5QoOIMzFWDRwpRitHuz/VLwTuMa0hKNbVumR86RX8H+BGkl52Kio2buJoySqQiYsaqKy7vrguna3MwWWPj3dBexGPEBYI6GOhnq2LEx+hBh0y8L8rodBGWkfl4co1dTXIyAif0gAenXA2UJHVhDk6r8/1umYfOH6+bUKtnub4hRjepsCLXQSn3rnx1r5Hez0QzX/HVr8CdvHtBghYE598aeXwpDG+78JrBQCNr55bzPL6VV065kYV6tqYeJsAN+YnK+Rqqk9tOKWlN27KhnXBNhb8pYNl04A5sfodYh0xlo9ScGbMrlXqSnqhtzDK36clfe1oY9qR1utsQ6HwSOfbPUjsBwHJ35dvp4bcsT9GB8j0gOd8+vc7B0+H4HW19LNi/D8rJ29GeecG3sWxcs/Vmf96O4G4/CrANK9tDevtDuHGbWPOl8kOx3uD9/wylitdK1KBqVatw== amosley@am-static-site
-  - name: ansible
-    groups: users, admin
-    sudo: ALL=(ALL) NOPASSWD:ALL
-    shell: /bin/bash
-    ssh_authorized_keys:
-      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINLo35q0WX/c3ulmxvLo8A9j2pmZHxIZiDwxYWQVaRib ansible@am-static-site
-
-# Do the SSH hardening before bootstrapping to allow ssh key access only
-runcmd:
-  - sed -i -e '/^\(#\|\)PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)PasswordAuthentication/s/^.*$/PasswordAuthentication no/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)KbdInteractiveAuthentication/s/^.*$/KbdInteractiveAuthentication no/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)ChallengeResponseAuthentication/s/^.*$/ChallengeResponseAuthentication no/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)MaxAuthTries/s/^.*$/MaxAuthTries 2/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)AllowTcpForwarding/s/^.*$/AllowTcpForwarding no/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)X11Forwarding/s/^.*$/X11Forwarding no/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)AllowAgentForwarding/s/^.*$/AllowAgentForwarding no/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)AuthorizedKeysFile/s/^.*$/AuthorizedKeysFile .ssh\/authorized_keys/' /etc/ssh/sshd_config
-  - sed -i '$a AllowUsers amosley ansible' /etc/ssh/sshd_config
-  - >
-    curl -L \
-      -X POST \
-      -H "Accept: application/vnd.github+json" \
-      -H "Authorization: Bearer ${data.hcp_vault_secrets_secret.github_pa_token.secret_value}" \
-      -H "X-GitHub-Api-Version: 2022-11-28" \
-      https://api.github.com/repos/${var.repo_name}/actions/workflows/${var.workflow_id}/dispatches \
-      -d '{"event_type": "ready"}'
-      
-EOT
-  ssh_keys = [ hcloud_ssh_key.local_machine.id, hcloud_ssh_key.ansible.id  ]
+  name = var.server_name
+  image = var.os_image
+  server_type = var.server_type
+  datacenter = var.datacenter
+  user_data = data.template_cloudinit_config.cloud_config.rendered
+  ssh_keys = [ for key in hcloud_ssh_key.keys : key.name  ]
   labels = {
     "role" : "webserver",
     "ssh_ip": hcloud_primary_ip.am_static_site_ip.ip_address
@@ -104,7 +79,7 @@ resource "cloudflare_dns_record" "static_site_record" {
 }
 resource "cloudflare_dns_record" "wildcard_record" {
   zone_id = data.hcp_vault_secrets_secret.cloudflare_zone_id.secret_value
-  name = "*.ajmosley.com"
+  name = format("%s.%s", "*", var.domain)
   content = var.domain
   type = "CNAME"
   ttl = 1
@@ -113,7 +88,7 @@ resource "cloudflare_dns_record" "wildcard_record" {
 }
 resource "cloudflare_dns_record" "www_record" {
   zone_id = data.hcp_vault_secrets_secret.cloudflare_zone_id.secret_value
-  name = "www.ajmosley.com"
+  name = format("%s.%s", "www", var.domain)
   content = var.domain
   type = "CNAME"
   ttl = 1
