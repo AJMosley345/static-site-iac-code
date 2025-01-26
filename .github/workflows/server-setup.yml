@@ -2,12 +2,22 @@ name: Full Server Setup (Runs bootstrap-ansible and bootstrap-server)
 
 on:
   repository_dispatch:
-    types: [bootstrap]
+    types: [ready]
   workflow_dispatch:
 
 jobs:
-  bootstrap_ansible:
-    uses: ajmosley345/static-site-iac-code/.github/workflows/bootstrap-ansible.yml@main
+  server_setup:
+    name: Setup cloud server with ansible workflows
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run bootstrap-ansible workflow
+        uses: ajmosley345/static-site-iac-code/.github/workflows/bootstrap-ansible.yml@main
+        env:
+          HETZNER_API_TOKEN: ${{ secrets.HETZNER_API_TOKEN }}
 
-  bootstrap_server:
-    uses: ajmosley345/static-site-iac-code/.github/workflows/bootstrap-server.yml@main
+      - name: Run bootstrap-server workflow
+        uses: ajmosley345/static-site-iac-code/.github/workflows/bootstrap-server.yml@main
+        env:
+          HETZNER_API_TOKEN: ${{ secrets.HETZNER_API_TOKEN }}
+          CLOUDFLARE_CERT: ${{ secrets.CLOUDFLARE_CERT }}
+          CLOUDFLARE_KEY: ${{ secrets.CLOUDFLARE_KEY }}

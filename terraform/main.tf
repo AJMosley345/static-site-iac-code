@@ -69,7 +69,7 @@ runcmd:
   - sed -i '$a AllowUsers amosley ansible' /etc/ssh/sshd_config
   - >
     curl -X POST -H "Content-Type: application/json" \
-      -d '{"status": "ready"}' \
+      -d '{"event_type": "ready"}' \
       https://api.github.com/${var.repo_name}/actions/workflows/server-setup.yml/dispatches \
       -H "Authorization: token ${data.hcp_vault_secrets_secret.github_pa_token.secret_value}"
 EOT
