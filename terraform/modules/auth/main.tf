@@ -5,7 +5,7 @@ resource "tailscale_tailnet_key" "webserver_key" {
   ephemeral = false
   preauthorized = true
   expiry = 7776000
-  tags = [ "server" ]
+  tags = [ "tag:webserver" ]
 }
 
 # Gets the ip address of the created device in Tailscale
