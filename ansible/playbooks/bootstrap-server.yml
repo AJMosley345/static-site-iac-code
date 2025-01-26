@@ -4,7 +4,6 @@
   become: true
 
   roles:
-    - bootstrap
     - common
     - git
     - nginx

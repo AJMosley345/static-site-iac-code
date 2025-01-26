@@ -65,16 +65,7 @@ write_files:
       AllowAgentForwarding no
       AuthorizedKeysFile .ssh/authorized_keys
       AllowUsers ${var.personal_user} ansible
-packages:
-  - fail2ban
-  - ufw
-package_update: true
-package_upgrade: true
 runcmd:
-  - printf "[sshd]\nenabled = true\nbanaction = iptables-multiport" > /etc/fail2ban/jail.local
-  - systemctl enable fail2ban
-  - ufw allow OpenSSH
-  - ufw enable
   - >
     curl -L \
       -X POST \

@@ -10,7 +10,7 @@
 - name: Deploy Cloudflare SSL certificate
   ansible.builtin.copy:
     content: "{{ lookup('file', 'cloudflare_cert.pem') }}"
-    dest: "{{ nginx_ssl_cert_path }}/cloudflare_cert.pem"
+    dest: '{{ nginx_ssl_cert_path }}/cloudflare_cert.pem'
     owner: root
     group: root
     mode: '0644'
@@ -18,7 +18,7 @@
 - name: Copy SSL private key
   ansible.builtin.copy:
     content: "{{ lookup('file', 'cloudflare_key.pem') }}"
-    dest: "{{ nginx_ssl_cert_path }}/cloudflare_key.pem"
+    dest: '{{ nginx_ssl_cert_path }}/cloudflare_key.pem'
     owner: root
     group: root
     mode: '0600'
