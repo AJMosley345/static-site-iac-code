@@ -1,9 +1,9 @@
 # Creates ssh key resources for any ssh keys in .ssh/
 locals {
-  ssh_files = fileset(".ssh/", "*.pub")
+  ssh_files = fileset("${path.module}/.ssh/", "*.pub")
   ssh_keys = { for file in local.ssh_files : file => {
       name = replace(file, ".pub", "")
-      public_key = file(".ssh/${file}")
+      public_key = file("${path.module}/.ssh/${file}")
     }
   }
 }
