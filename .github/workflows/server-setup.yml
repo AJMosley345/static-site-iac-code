@@ -11,12 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run bootstrap-ansible workflow
-        uses: ajmosley345/static-site-iac-code/.github/workflows/bootstrap-ansible.yml@main
+        uses: ./.github/workflows/bootstrap-ansible.yml@main
         env:
           HETZNER_API_TOKEN: ${{ secrets.HETZNER_API_TOKEN }}
 
       - name: Run bootstrap-server workflow
-        uses: ajmosley345/static-site-iac-code/.github/workflows/bootstrap-server.yml@main
+        uses: ./.github/workflows/bootstrap-server.yml@main
         env:
           HETZNER_API_TOKEN: ${{ secrets.HETZNER_API_TOKEN }}
           CLOUDFLARE_CERT: ${{ secrets.CLOUDFLARE_CERT }}
