@@ -34,7 +34,7 @@ jobs:
         
       - name: Add Ansible to PATH
         run: echo "$(python -m site --user-base)/bin" >> $GITHUB_PATH
-
+      
       - name: Run playbook
         uses: dawidd6/action-ansible-playbook@v2
         env:

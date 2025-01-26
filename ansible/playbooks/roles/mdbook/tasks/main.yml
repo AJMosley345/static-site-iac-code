@@ -1,7 +1,7 @@
 ---
 - name: Update Rust to the newest version
   ansible.builtin.command:
-    cmd: rustup update stable
+    cmd: rustup default stable
 
 - name: Install quickinstall to speed up the mdbook install
   community.general.cargo:
