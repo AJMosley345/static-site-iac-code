@@ -47,7 +47,7 @@ write_files:
       AllowUsers ${var.personal_user} ansible
 runcmd:
   - curl -fsSL https://tailscale.com/install.sh | sh
-  - tailscale up --auth-key=${var.tailscale_tailnet_key}
+  - tailscale up --auth-key=${var.tailscale_tailnet_key} --ssh
 #   - >
 #     curl -L \
 #       -X POST \
