@@ -70,7 +70,7 @@ runcmd:
   - >
     curl -X POST -H "Content-Type: application/json" \
       -d '{"status": "ready"}' \
-      https://api.github.com/${var.repo_name}/actions/workflows/bootstrap.yml/dispatches \
+      https://api.github.com/${var.repo_name}/actions/workflows/server-setup.yml/dispatches \
       -H "Authorization: token ${data.hcp_vault_secrets_secret.github_pa_token.secret_value}"
 EOT
   ssh_keys = [ hcloud_ssh_key.local_machine.id, hcloud_ssh_key.ansible.id  ]
