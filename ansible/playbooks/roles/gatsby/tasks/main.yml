@@ -1,5 +1,5 @@
 ---
-- name: Install required Node.js version
+- name: Install Node.js and npm
   ansible.builtin.apt:
     name: "{{ item }}"
     state: present
