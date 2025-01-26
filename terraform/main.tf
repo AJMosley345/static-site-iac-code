@@ -47,7 +47,7 @@ resource "hcloud_server" "am_static_site" {
   image = var.os_image
   server_type = var.server_type
   datacenter = var.datacenter
-  # user_data = data.template_cloudinit_config.cloud_config.rendered
+  user_data = data.template_cloudinit_config.cloud_config.rendered
   ssh_keys = [ for key in hcloud_ssh_key.keys : key.name  ]
   labels = {
     "role" : "webserver",
