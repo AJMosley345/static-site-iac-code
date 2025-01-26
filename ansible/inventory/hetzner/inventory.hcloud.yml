@@ -1,7 +1,7 @@
 plugin: hetzner.hcloud.hcloud
 api_token: "{{ lookup('env', 'HETZNER_API_TOKEN') }}"
 keyed_groups:
-  - key: labels.ssh_ip
-    prefix: ssh_ip
+  - key: labels.hostname
+    prefix: hostname
 compose:
-  ansible_host: "'{{ labels.ssh_ip | default(ipv4) }}'"
+  ansible_host: "'{{ labels.hostname | default(ipv4) }}'"
