@@ -51,33 +51,30 @@ users:
   ssh_authorized_keys:
     - ${var.ansible_user_ssh_key}
 
-# Writes the ssh hardening config to a separate file for better management
-# write_files:
-#   path: /etc/ssh/sshd_config.d/hardening.conf
-#   content: |
-#     PermitRootLogin no
-#     PasswordAuthentication no
-#     KbdInteractiveAuthentication no
-#     ChallengeResponseAuthentication no
-#     MaxAuthTries 2
-#     AllowTcpForwarding no
-#     X11Forwarding no
-#     AllowAgentForwarding no
-#     AuthorizedKeysFile .ssh/authorized_keys
-#     AllowUsers ${var.personal_user} ansible
-
-# Webhook to call bootstrap-server workflow
+Writes the ssh hardening config to a separate file for better management
+write_files:
+  path: /etc/ssh/sshd_config.d/hardening.conf
+  content: |
+    PermitRootLogin no
+    PasswordAuthentication no
+    KbdInteractiveAuthentication no
+    ChallengeResponseAuthentication no
+    MaxAuthTries 2
+    AllowTcpForwarding no
+    X11Forwarding no
+    AllowAgentForwarding no
+    AuthorizedKeysFile .ssh/authorized_keys
+    AllowUsers ${var.personal_user} ansible
+packages:
+  - fail2ban
+  - ufw
+package_update: true
+package_upgrade: true
 runcmd:
-  - sed -i -e '/^\(#\|\)PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)PasswordAuthentication/s/^.*$/PasswordAuthentication no/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)KbdInteractiveAuthentication/s/^.*$/KbdInteractiveAuthentication no/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)ChallengeResponseAuthentication/s/^.*$/ChallengeResponseAuthentication no/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)MaxAuthTries/s/^.*$/MaxAuthTries 2/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)AllowTcpForwarding/s/^.*$/AllowTcpForwarding no/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)X11Forwarding/s/^.*$/X11Forwarding no/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)AllowAgentForwarding/s/^.*$/AllowAgentForwarding no/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)AuthorizedKeysFile/s/^.*$/AuthorizedKeysFile .ssh\/authorized_keys/' /etc/ssh/sshd_config
-  - sed -i '$a AllowUsers ${var.personal_user} ansible' /etc/ssh/sshd_config
+  - printf "[sshd]\nenabled = true\nbanaction = iptables-multiport" > /etc/fail2ban/jail.local
+  - systemctl enable fail2ban
+  - ufw allow OpenSSH
+  - ufw enable
   - >
     curl -L \
       -X POST \
