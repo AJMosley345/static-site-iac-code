@@ -91,7 +91,7 @@
   become_user: 'root'
   ansible.posix.authorized_key:
     user: ${{ common_username }}
-    path: '/home/{{ common_username }}/.ssh/authorized_keys'
+    path: /home/{{ common_username }}/.ssh/authorized_keys
     key: |
-      {{ lookup('file', 'common_username.pub') }}
+      {{ lookup('file', common_username + '.pub') }}
     exclusive: true
