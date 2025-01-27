@@ -21,7 +21,8 @@ data "template_file" "cloud_config" {
     ansible_user_ssh_key = var.ansible_user_ssh_key
     personal_user = var.personal_user
     server_name = var.server_name
-    tailscale_tailnet_key = var.tailscale_tailnet_key
+    # tailscale_tailnet_key = var.tailscale_tailnet_key
+    tailscale_auth_token = var.tailscale_tailnet_key
     tailscale_static_ip = var.tailscale_ip
     tailscale_api_token = var.tailscale_api_token
     github_pa_token = var.github_pa_token

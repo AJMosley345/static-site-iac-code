@@ -71,6 +71,10 @@ data "hcp_vault_secrets_secret" "tailscale_api_key" {
   app_name = var.hcp_app_name
   secret_name = "tailscale_api_key"
 }
+data "hcp_vault_secrets_secret" "tailscale_auth_token" {
+  app_name = var.hcp_app_name
+  secret_name = "tailscale_auth_token"
+}
 
 # Authenticate to each provider with the secrets
 provider "porkbun" {
