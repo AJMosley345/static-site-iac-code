@@ -14,6 +14,10 @@ resource "hcloud_ssh_key" "keys" {
   public_key = each.value.public_key
 }
 
+data "hcloud_server" "am_static_site_data" {
+  name = var.server_name
+}
+
 # Takes the cloud config and maps the values to variables
 data "template_file" "cloud_config" {
   template = file("${path.module}/cloud-init/cloud-config.yaml")
@@ -22,7 +26,7 @@ data "template_file" "cloud_config" {
     personal_user = var.personal_user
     tailscale_tailnet_key = var.tailscale_tailnet_key
     hcloud_api_token = var.hcloud_api_token
-    server_id = hcloud_server.am_static_site.id
+    server_id = data.hcloud_server.am_static_site_data.id
     github_pa_token = var.github_pa_token
     repo_name = var.repo_name
     workflow_id = var.workflow_id
