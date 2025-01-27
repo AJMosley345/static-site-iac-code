@@ -15,13 +15,13 @@ resource "hcloud_ssh_key" "keys" {
 }
 
 # Takes the cloud config and maps the values to variables
+# tailscale_tailnet_key = var.tailscale_tailnet_key
 data "template_file" "cloud_config" {
   template = file("${path.module}/cloud-init/cloud-config.yaml")
   vars = {
     ansible_user_ssh_key = var.ansible_user_ssh_key
     personal_user = var.personal_user
     server_name = var.server_name
-    # tailscale_tailnet_key = var.tailscale_tailnet_key
     tailscale_auth_token = var.tailscale_tailnet_key
     tailscale_static_ip = var.tailscale_ip
     tailscale_api_token = var.tailscale_api_token
