@@ -5,4 +5,3 @@ variable "tailscale_tailnet" {
 variable "server_name" {
   type = string
 }
-variable "hcloud_server_resource" {}

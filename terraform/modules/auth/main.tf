@@ -7,11 +7,8 @@ resource "tailscale_tailnet_key" "webserver_key" {
   expiry = 7776000
   tags = [ "tag:webserver" ]
 }
-output "tailscale_auth_key" {
-  value = tailscale_tailnet_key.webserver_key.key
-  sensitive = true
-}
+
 # Gets the ip address of the created device in Tailscale
-# data "tailscale_device" "webserver" {
-#   name    = format("%s.%s", var.server_name, var.tailscale_tailnet)
-# }
+data "tailscale_device" "webserver" {
+  name    = format("%s.%s", var.server_name, var.tailscale_tailnet)
+}

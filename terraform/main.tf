@@ -27,7 +27,8 @@ module "compute" {
   github_pa_token = data.hcp_vault_secrets_secret.github_pa_token.secret_value
   primary_ip_id = module.network.primary_ip_id
   firewall_id = module.network.firewall_id
-  # tailscale_ip = module.auth.webserver_tailscale_ip
+  hcloud_api_token = data.hcp_vault_secrets_secret.hetzner_api_key
+  tailscale_ip = module.auth.webserver_tailscale_ip
   tailscale_tailnet_key = module.auth.tailscale_tailnet_key
 }
 
@@ -35,5 +36,4 @@ module "auth" {
   source = "./modules/auth"
   tailscale_tailnet = var.tailscale_tailnet
   server_name = var.server_name
-  hcloud_server_resource = module.compute.hcloud_server_resource
 }
