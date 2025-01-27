@@ -30,19 +30,19 @@ data "template_file" "cloud_config" {
   }
 }
 
-resource "hcloud_server" "am_static_site" {
-  name = var.server_name
-  image = var.os_image
-  server_type = var.server_type
-  datacenter = var.datacenter
-  user_data = data.template_file.cloud_config.rendered
-  ssh_keys = [ for key in hcloud_ssh_key.keys : key.name  ]
-  labels = {
-    "role" : "webserver",
-    "ssh_ip": var.tailscale_ip
-  }
-  public_net {
-    ipv4 = var.primary_ip_id
-  }
-  firewall_ids = [var.firewall_id]
-}
+# resource "hcloud_server" "am_static_site" {
+#   name = var.server_name
+#   image = var.os_image
+#   server_type = var.server_type
+#   datacenter = var.datacenter
+#   user_data = data.template_file.cloud_config.rendered
+#   ssh_keys = [ for key in hcloud_ssh_key.keys : key.name  ]
+#   labels = {
+#     "role" : "webserver",
+#     "ssh_ip": var.tailscale_ip
+#   }
+#   public_net {
+#     ipv4 = var.primary_ip_id
+#   }
+#   firewall_ids = [var.firewall_id]
+# }
