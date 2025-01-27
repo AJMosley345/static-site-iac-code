@@ -31,14 +31,30 @@ runcmd:
   - TAILSCALE_IP=$(tailscale ip -4)
   # Get the Tailscale device id of the newly created device so the properties can be updated. Also get the "old/outdated" id
   - TAILSCALE_DEVICE_ID=$(tailscale whois --json $${TAILSCALE_IP}:22 | jq -r .Node.StableID)
-  # Do a check to compare the values and delete the old server
   - >
-    curl \
+    DEVICE_INFO=$(curl -s -H "Authorization: Bearer ${tailscale_api_token}" "https://api.tailscale.com/api/v2/tailnet/-/devices")
+  # Find the old node by name (replace ${server_name} with the old server's name)
+  - OLD_DEVICE_ID=$(echo "$$DEVICE_INFO" | jq -r '.devices[] | select(.hostname=="'"${server_name}"'") | .nodeId')
+  # Do a check to compare the values and delete the old server
+  - >  
+    if [[ -n "$$OLD_DEVICE_ID" ]]; then
+      echo "Old device found with ID: $$OLD_DEVICE_ID"
+
+      # Remove the old device
+      curl -X DELETE -H "Authorization: Bearer ${tailscale_api_token}" "https://api.tailscale.com/api/v2/device/$${OLD_DEVICE_ID}"
+      
+      # Rename current device to the name defined in server_name
+      curl \
       -X POST \
       -H 'Authorization: Bearer ${tailscale_api_token}' \
       -H 'Content-Type: application/json' \
       "https://api.tailscale.com/api/v2/device/$${TAILSCALE_DEVICE_ID}/name" \
       -d '{"name": "${server_name}"}'
+
+      echo "Old device removed and new device renamed."
+    else
+      echo "No old device found for hostname ${server_name}."
+    fi
   # Set the new device to have a static ip (defined in the Terraform variables) so that ansible finds the correct host.
   - >
     curl \
@@ -47,11 +63,11 @@ runcmd:
       -H 'Content-Type: application/json' \
       "https://api.tailscale.com/api/v2/device/$${TAILSCALE_DEVICE_ID}/ip" \
       -d '{"ipv4": "${tailscale_static_ip}"}'
-#   - >
-#     curl -L \
-#       -X POST \
-#       -H "Accept: application/vnd.github+json" \
-#       -H "Authorization: Bearer ${github_pa_token}" \
-#       -H "X-GitHub-Api-Version: 2022-11-28" \
-#       https://api.github.com/repos/${repo_name}/actions/workflows/${workflow_id}/dispatches \
-#       -d '{"ref": "main"}'
+  - >
+    curl -L \
+      -X POST \
+      -H "Accept: application/vnd.github+json" \
+      -H "Authorization: Bearer ${github_pa_token}" \
+      -H "X-GitHub-Api-Version: 2022-11-28" \
+      https://api.github.com/repos/${repo_name}/actions/workflows/${workflow_id}/dispatches \
+      -d '{"ref": "main"}'
