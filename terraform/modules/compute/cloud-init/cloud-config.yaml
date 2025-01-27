@@ -29,7 +29,7 @@ runcmd:
   - tailscale up --auth-key=${tailscale_tailnet_key} --ssh
   # Get current IP of Tailscale and potential "old" IP
   - TAILSCALE_IP=$(tailscale ip -4)
-  - OLD_TAILSCALE_IP=$(tailscale ip 4 ${server_name})
+  - OLD_TAILSCALE_IP=$(tailscale ip -4 ${server_name})
   # Get the Tailscale device id of the newly created device so the properties can be updated. Also get the "old/outdated" id
   - TAILSCALE_DEVICE_ID=$(tailscale whois --json $${TAILSCALE_IP}:22 | jq -r .Node.StableID)
   - OLD_TAILSCALE_DEVICE_ID=$(tailscale whois --json $${OLD_TAILSCALE_IP}:22 | jq -r .Node.StableID)
