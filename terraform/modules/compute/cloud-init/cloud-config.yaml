@@ -26,8 +26,7 @@ packages:
   - jq
 runcmd:
   - curl -fsSL https://tailscale.com/install.sh | sh
-  - tailscale up --auth-key=${tailscale_auth_token} --ssh
-  # ${tailscale_tailnet_key}
+  - tailscale up --auth-key=${tailscale_tailnet_key} --ssh
   # Get current IP of Tailscale and potential "old" IP
   - TAILSCALE_IP=$(tailscale ip -4)
   # Get the Tailscale device id of the newly created device so the properties can be updated. Also get the "old/outdated" id

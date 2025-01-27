@@ -29,7 +29,6 @@ module "compute" {
   firewall_id = module.network.firewall_id
   tailscale_ip = var.tailscale_ip
   tailscale_tailnet_key = data.hcp_vault_secrets_secret.tailscale_auth_token.secret_value
-  #tailscale_tailnet_key = module.auth.tailscale_tailnet_key
   tailscale_api_token = data.hcp_vault_secrets_secret.tailscale_api_key.secret_value
 }
 
