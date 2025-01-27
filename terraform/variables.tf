@@ -74,3 +74,6 @@ variable "ansible_user_ssh_key" {
 variable "tailscale_tailnet" {
   type = string
 }
+variable "tailscale_ip" {
+  type = string
+}

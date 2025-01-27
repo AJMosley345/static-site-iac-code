@@ -24,9 +24,10 @@ data "template_file" "cloud_config" {
   vars = {
     ansible_user_ssh_key = var.ansible_user_ssh_key
     personal_user = var.personal_user
+    server_name = var.server_name
     tailscale_tailnet_key = var.tailscale_tailnet_key
-    hcloud_api_token = var.hcloud_api_token
-    server_id = data.hcloud_server.am_static_site_data.id
+    tailscale_static_ip = var.tailscale_ip
+    tailscale_api_token = var.tailscale_api_token
     github_pa_token = var.github_pa_token
     repo_name = var.repo_name
     workflow_id = var.workflow_id

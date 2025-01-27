@@ -45,9 +45,6 @@ variable "primary_ip_id" {
 variable "firewall_id" {
   description = "ID of the firewall created"
 }
-variable "hcloud_api_token" {
-  type = string
-  sensitive = true
-}
 variable "tailscale_ip" {}
 variable "tailscale_tailnet_key" {}
+variable "tailscale_api_token" {}
