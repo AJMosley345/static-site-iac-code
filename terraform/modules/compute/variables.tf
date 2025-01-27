@@ -45,5 +45,5 @@ variable "primary_ip_id" {
 variable "firewall_id" {
   description = "ID of the firewall created"
 }
-variable "tailscale_ip" {}
+# variable "tailscale_ip" {}
 variable "tailscale_tailnet_key" {}

@@ -60,7 +60,7 @@ EOT
   ssh_keys = [ for key in hcloud_ssh_key.keys : key.name  ]
   labels = {
     "role" : "webserver",
-    "ssh_ip": var.tailscale_ip
+    # "ssh_ip": var.tailscale_ip
   }
   public_net {
     ipv4 = var.primary_ip_id
