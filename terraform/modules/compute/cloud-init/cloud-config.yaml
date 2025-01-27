@@ -29,20 +29,20 @@ runcmd:
   - tailscale up --auth-key=${tailscale_tailnet_key} --ssh
   # Get current IP of Tailscale and potential "old" IP
   - TAILSCALE_IP=$(tailscale ip -4)
-  - OLD_TAILSCALE_IP=$(tailscale -ip 4 ${server_name})
+  - OLD_TAILSCALE_IP=$(tailscale ip 4 ${server_name})
   # Get the Tailscale device id of the newly created device so the properties can be updated. Also get the "old/outdated" id
-  - TAILSCALE_DEVICE_ID=$(tailscale whois --json $${TAILSCALE_IP}:22 | jq .Node.StableID)
+  - TAILSCALE_DEVICE_ID=$(tailscale whois --json $${TAILSCALE_IP}:22 | jq -r .Node.StableID)
   - OLD_TAILSCALE_DEVICE_ID=$(tailscale whois --json $${OLD_TAILSCALE_IP}:22 | jq -r .Node.StableID)
   # Do a check to compare the values and delete the old server
   - >
     if [[ "$TAILSCALE_DEVICE_ID" != "$OLD_TAILSCALE_DEVICE_ID" ]]; then
       echo "Device ID mismatch detected. Sending delete command to Tailscale for the old device."
-      curl -X DELETE -H 'Authorization: Bearer ${tailscale_api_token}' https://api.tailscale.com/api/v2/device/$${OLD_TAILSCALE_DEVICE_ID}
+      curl -X DELETE -H 'Authorization: Bearer ${tailscale_api_token}' "https://api.tailscale.com/api/v2/device/$${OLD_TAILSCALE_DEVICE_ID}"
       curl \
         -X POST \
         -H 'Authorization: Bearer ${tailscale_api_token}' \
         -H 'Content-Type: application/json' \
-        https://api.tailscale.com/api/v2/device/$${TAILSCALE_DEVICE_ID}/name \
+        "https://api.tailscale.com/api/v2/device/$${TAILSCALE_DEVICE_ID}/name" \
         -d '{"name": "${server_name}"}'
     else
       echo "Device IDs match. No action needed."
@@ -53,7 +53,7 @@ runcmd:
       -X POST \
       -H 'Authorization: Bearer ${tailscale_api_token}' \
       -H 'Content-Type: application/json' \
-      https://api.tailscale.com/api/v2/device/$${TAILSCALE_DEVICE_ID}/ip \
+      "https://api.tailscale.com/api/v2/device/$${TAILSCALE_DEVICE_ID}/ip" \
       -d '{"ipv4": "${tailscale_static_ip}"}'
 #   - >
 #     curl -L \

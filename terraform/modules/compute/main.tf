@@ -14,10 +14,6 @@ resource "hcloud_ssh_key" "keys" {
   public_key = each.value.public_key
 }
 
-data "hcloud_server" "am_static_site_data" {
-  name = var.server_name
-}
-
 # Takes the cloud config and maps the values to variables
 data "template_file" "cloud_config" {
   template = file("${path.module}/cloud-init/cloud-config.yaml")
