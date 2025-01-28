@@ -13,7 +13,7 @@ server {
 
     server_name {{ nginx_domain }} www.{{ nginx_domain }};
 
-    root /var/www/{{ nginx_domain }}/;
+    root /var/www/{{ nginx_domain }}/public/;
     index index.html index.htm;
 
     location / {
