@@ -9,6 +9,10 @@
   loop:
     - "{{ git_www_path }}"
 
+- name: Sets git default branch to be main instead of master   # noqa: command-instead-of-module # Suppresses lint rule about using command module when a module is available
+  ansible.builtin.command:
+    cmd: git config --global init.defaultBranch main
+
 - name: Initialize bare Git repository  # noqa: command-instead-of-module # Suppresses lint rule about using command module when a module is available
   ansible.builtin.command:
     cmd: git init --bare {{ git_repo_path }}
@@ -19,6 +23,7 @@
   ansible.builtin.file:
     path: "{{ git_repo_path }}"
     state: directory
+    recurse: true
     owner: "{{ git_username }}"
     group: "{{ git_username }}"
     mode: '0755'
