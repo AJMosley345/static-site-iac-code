@@ -12,3 +12,7 @@
   community.general.npm:
     name: gatsby-cli
     global: true
+  loop:
+    - gatsby-cli
+    - yarn
+    - corepack

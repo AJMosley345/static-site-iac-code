@@ -4,12 +4,12 @@
   become: true
 
   roles:
-    # - bootstrap
-    # - common
-    - git
+    - bootstrap
+    - common
     - nginx
-    # - gatsby
+    - gatsby
+    - git
 
-  # tasks:
-    # - name: Reboot server once roles are done
-      # ansible.builtin.reboot:
+  tasks:
+    - name: Reboot server once roles are done
+      ansible.builtin.reboot:

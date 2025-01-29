@@ -9,7 +9,7 @@
   loop:
     - "{{ git_www_path }}"
 
-- name: Sets git default branch to be main instead of master   # noqa: command-instead-of-module # Suppresses lint rule about using command module when a module is available
+- name: Sets git default branch to be main instead of master  # noqa: command-instead-of-module # Suppresses lint rule about using command module when a module is available
   ansible.builtin.command:
     cmd: git config --global init.defaultBranch main
 
@@ -34,13 +34,19 @@
     content: |
       #!/bin/bash
       set -e
+
+      # Define repo and website paths
       GIT_REPO="{{ git_repo_path }}"
       WORK_TREE="{{ git_www_path }}"
+
+      # Checkout the latest code
       cd $GIT_REPO
       GIT_WORK_TREE=$WORK_TREE git checkout -f
+
+      # Install dependencies and build
       cd $WORK_TREE
-      npm install --production
-      npm run build
+      yarn install --production
+      yarn build
     mode: '0755'
     owner: "{{ git_username }}"
     group: "{{ git_username }}"
