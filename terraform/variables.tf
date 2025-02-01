@@ -34,7 +34,7 @@ variable "tailscale_ip" {
   type = string
 }
 variable "github_pa_token" {}
-variable "tailscale_api_token" {}
+variable "tailscale_api_key" {}
 variable "tailscale_auth_key" {}
 
 # Hetzner Variables

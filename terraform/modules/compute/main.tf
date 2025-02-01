@@ -23,7 +23,7 @@ data "template_file" "cloud_config" {
     server_name = var.server_name
     tailscale_tailnet_key = var.tailscale_auth_key
     tailscale_static_ip = var.tailscale_ip
-    tailscale_api_token = var.tailscale_api_token
+    tailscale_api_token = var.tailscale_api_key
     github_pa_token = var.github_pa_token
     repo_name = var.repo_name
     workflow_id = var.workflow_id

@@ -22,7 +22,7 @@ module "compute" {
   datacenter = var.datacenter
   primary_ip_id = module.network.primary_ip_id
   firewall_id = module.network.firewall_id
-  
+
   # Cloud-Init Variables
   ansible_user_ssh_key = var.ansible_user_ssh_key
   personal_user = var.personal_user
@@ -31,7 +31,7 @@ module "compute" {
   github_pa_token = var.github_pa_token
   tailscale_ip = var.tailscale_ip
   tailscale_auth_key = var.tailscale_auth_key
-  tailscale_api_token = var.tailscale_api_token
+  tailscale_api_key = var.tailscale_api_key
 }
 
 module "auth" {

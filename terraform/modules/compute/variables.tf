@@ -4,7 +4,7 @@ variable "workflow_id" {}
 variable "github_pa_token" {}
 variable "tailscale_auth_key" {}
 variable "tailscale_ip" {}
-variable "tailscale_api_token" {}
+variable "tailscale_api_key" {}
 variable "personal_user" {}
 variable "ansible_user_ssh_key" {}
 
