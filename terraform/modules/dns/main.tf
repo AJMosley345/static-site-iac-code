@@ -11,7 +11,7 @@ resource "aws_route53_zone" "main_domain_zone" {
 # Requests a certficate for the domain
 resource "aws_acm_certificate" "aws_domain_cert_request" {
   domain_name = var.domain_name
-  subject_alternative_names = ["*.{var.domain_name}", "www.{var.domain_name}"]
+  subject_alternative_names = ["*.${var.domain_name}", "www.${var.domain_name}"]
   validation_method = "DNS"
 
   tags = {
