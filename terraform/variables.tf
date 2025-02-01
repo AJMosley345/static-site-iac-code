@@ -77,3 +77,8 @@ variable "tailscale_tailnet" {
 variable "tailscale_ip" {
   type = string
 }
+
+# Netlify Variables
+variable "netlify_address" {
+  type = string
+}

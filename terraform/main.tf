@@ -11,6 +11,7 @@ module "dns" {
   porkbun_nameservers = var.porkbun_nameservers
   cloudflare_zone_id = data.hcp_vault_secrets_secret.cloudflare_zone_id.secret_value
   static_ip = module.network.static_ip
+  netlify_address = var.netlify_address
 }
 
 module "compute" {

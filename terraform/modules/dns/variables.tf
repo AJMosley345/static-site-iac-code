@@ -16,3 +16,6 @@ variable "static_ip" {
   type        = string
 }
 variable "cloudflare_zone_id" {}
+variable "netlify_address" {
+  type = string
+}

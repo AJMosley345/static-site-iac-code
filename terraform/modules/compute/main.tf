@@ -41,6 +41,9 @@ resource "hcloud_server" "am_static_site" {
     "role" : "webserver",
     "ssh_ip": var.tailscale_ip
   }
+  lifecycle {
+    ignore_changes = [ user_data ]
+  }
   public_net {
     ipv4 = var.primary_ip_id
   }
