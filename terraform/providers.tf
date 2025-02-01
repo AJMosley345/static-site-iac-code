@@ -11,10 +11,6 @@ terraform {
       source = "kyswtn/porkbun"
       version = "0.1.3"
     }
-    cloudflare = {
-      source = "cloudflare/cloudflare"
-      version = "5.0.0-rc1"
-    }
     aws = {
       source = "hashicorp/aws"
       version = "5.84.0"
@@ -35,7 +31,6 @@ provider "porkbun" {
   api_key = var.porkbun_api_key
   secret_api_key = var.porkbun_secret_api_key
 }
-provider "cloudflare" {}
 provider "hcloud" {}
 provider "tailscale" {}
 provider "aws" {}

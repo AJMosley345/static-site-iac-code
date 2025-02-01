@@ -8,7 +8,6 @@ variable "porkbun_nameservers" {
   type = list(string)
   default = [ "" ]
 }
-variable "cloudflare_zone_id" {}
 variable "porkbun_api_key" {}
 variable "porkbun_secret_api_key" {}
 

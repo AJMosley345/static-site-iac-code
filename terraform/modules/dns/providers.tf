@@ -3,8 +3,8 @@ terraform {
     porkbun = {
       source = "kyswtn/porkbun"
     }
-    cloudflare = {
-      source = "cloudflare/cloudflare"
+    aws = {
+      source = "hashicorp/aws"
     }
   }
 }
