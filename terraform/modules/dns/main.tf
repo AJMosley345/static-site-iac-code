@@ -81,6 +81,8 @@ resource "aws_route53_record" "aws_wildcard_cname_record" {
 resource "porkbun_nameservers" "cloudflare_nameservers" {
   domain = var.domain_name
   nameservers = [
+    "anderson.ns.cloudflare.com",
+    "evelyn.ns.cloudflare.com",
     aws_route53_zone.main_domain_zone.name_servers[0],
     aws_route53_zone.main_domain_zone.name_servers[1],
     aws_route53_zone.main_domain_zone.name_servers[2],
