@@ -36,7 +36,7 @@ resource "cloudflare_dns_record" "static_site_record" {
 
 resource "cloudflare_dns_record" "netlify_cname_record" {
   zone_id = var.cloudflare_zone_id
-  name  = "@"
+  name  = "*"
   content = var.netlify_address
   type = "CNAME"
   ttl = 1
