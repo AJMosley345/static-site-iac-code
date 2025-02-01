@@ -6,10 +6,6 @@ variable "domain_name" {
 variable "porkbun_nameservers" {
   description = "Nameservers to point Porkbun domain to"
   type = list(string)
-  default = [ 
-    "evelyn.ns.cloudflare.com",
-    "anderson.ns.cloudflare.com"
-  ]
 }
 variable "cloudflare_zone_id" {}
 variable "porkbun_api_key" {}
