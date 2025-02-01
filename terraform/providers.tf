@@ -31,7 +31,10 @@ terraform {
 }
 
 # Providers are getting the appropriate variables through HCP Vault Secrets and Terraform integration.
-provider "porkbun" {}
+provider "porkbun" {
+  api_key = var.porkbun_api_key
+  secret_api_key = var.porkbun_secret_api_key
+}
 provider "cloudflare" {}
 provider "hcloud" {}
 provider "tailscale" {}
