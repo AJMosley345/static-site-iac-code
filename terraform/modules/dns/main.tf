@@ -27,7 +27,7 @@ resource "aws_acm_certificate" "aws_domain_cert_request" {
 # Creates a validation record for the request to verify the domain
 resource "aws_route53_record" "aws_validation_record" {
   for_each = {
-    for dvo in aws_aws_acm_certificate.aws_domain_cert_request.domain_validation_options: dvo.domain_name => {
+    for dvo in aws_acm_certificate.aws_domain_cert_request.domain_validation_options: dvo.domain_name => {
       name   = dvo.resource_record_name
       record = dvo.resource_record_value
       type   = dvo.resource_record_type
@@ -44,7 +44,7 @@ resource "aws_route53_record" "aws_validation_record" {
 # "Waits" for the certificate to be issued
 resource "aws_acm_certificate_validation" "aws_cert_validation" {
   certificate_arn = aws_acm_certificate.aws_domain_cert_request.arn
-  validation_record_fqdns = [for record in aws_route53_record.aws_route53_record.aws_validation_record : record.fqdn]
+  validation_record_fqdns = [for record in aws_route53_record.aws_validation_record : record.fqdn]
 }
 
 # Creates the appropriate records 

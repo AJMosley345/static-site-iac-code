@@ -9,7 +9,6 @@ module "dns" {
   source = "./modules/dns"
   domain_name = var.domain_name
   porkbun_nameservers = var.porkbun_nameservers
-  cloudflare_zone_id = var.cloudflare_zone_id
   static_ip = module.network.static_ip
 }
 
