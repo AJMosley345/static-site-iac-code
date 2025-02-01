@@ -1,19 +1,5 @@
-# HCP Variables
-variable "hcp_sp_client_id" {
-  type = string
-  sensitive = true
-}
-variable "hcp_sp_client_secret" {
-  type = string
-  sensitive = true
-}
-variable "hcp_app_name" {
-  description = "Name of the hcp app to access vault secrets from"
-  type = string
-}
-
 # Cloudflare/Porkbun Variables
-variable "domain" {
+variable "domain_name" {
   description = "Domain name (i.e. google.com)"
   type = string
 }
@@ -25,6 +11,7 @@ variable "porkbun_nameservers" {
     "anderson.ns.cloudflare.com"
   ]
 }
+variable "cloudflare_zone_id" {}
 
 # Cloud-Init Variables
 variable "repo_name" {
@@ -35,6 +22,20 @@ variable "workflow_id" {
   description = "ID of the workflow to trigger at the end of cloud-init"
   type = string
 }
+variable "personal_user" {
+  description = "The name of the user who will be created by ansible"
+  type        = string
+}
+variable "ansible_user_ssh_key" {
+  description = "Public key content for the ansible user"
+  type = string
+}
+variable "tailscale_ip" {
+  type = string
+}
+variable "github_pa_token" {}
+variable "tailscale_api_token" {}
+variable "tailscale_auth_key" {}
 
 # Hetzner Variables
 variable "server_name" {
@@ -57,28 +58,8 @@ variable "ip_type" {
   description = "Type of IP address to create (ipv4 or ipv6)"
   type = string
 }
-variable "ansible_user" {
-  description = "The name of the user whose SSH key will be added to the Cloud-Init configuration."
-  type        = string
-}
-variable "personal_user" {
-  description = "The name of the user who will be created by ansible"
-  type        = string
-}
-variable "ansible_user_ssh_key" {
-  description = "Public key content for the ansible user"
-  type = string
-}
 
 # Tailscale Variables
 variable "tailscale_tailnet" {
-  type = string
-}
-variable "tailscale_ip" {
-  type = string
-}
-
-# Netlify Variables
-variable "netlify_address" {
   type = string
 }

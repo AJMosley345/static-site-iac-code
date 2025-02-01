@@ -7,30 +7,31 @@ module "network" {
 
 module "dns" {
   source = "./modules/dns"
-  domain = var.domain
+  domain_name = var.domain_name
   porkbun_nameservers = var.porkbun_nameservers
-  cloudflare_zone_id = data.hcp_vault_secrets_secret.cloudflare_zone_id.secret_value
+  cloudflare_zone_id = var.cloudflare_zone_id
   static_ip = module.network.static_ip
-  netlify_address = var.netlify_address
 }
 
 module "compute" {
   source = "./modules/compute"
+  # Server creation variables
   server_name = var.server_name
   os_image = var.os_image
   server_type = var.server_type
   datacenter = var.datacenter
-  ansible_user = var.ansible_user
+  primary_ip_id = module.network.primary_ip_id
+  firewall_id = module.network.firewall_id
+  
+  # Cloud-Init Variables
   ansible_user_ssh_key = var.ansible_user_ssh_key
   personal_user = var.personal_user
   workflow_id = var.workflow_id
   repo_name = var.repo_name
-  github_pa_token = data.hcp_vault_secrets_secret.github_pa_token.secret_value
-  primary_ip_id = module.network.primary_ip_id
-  firewall_id = module.network.firewall_id
+  github_pa_token = var.github_pa_token
   tailscale_ip = var.tailscale_ip
-  tailscale_tailnet_key = data.hcp_vault_secrets_secret.tailscale_auth_token.secret_value
-  tailscale_api_token = data.hcp_vault_secrets_secret.tailscale_api_key.secret_value
+  tailscale_auth_key = var.tailscale_auth_key
+  tailscale_api_token = var.tailscale_api_token
 }
 
 module "auth" {
