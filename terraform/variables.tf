@@ -12,6 +12,8 @@ variable "porkbun_nameservers" {
   ]
 }
 variable "cloudflare_zone_id" {}
+variable "porkbun_api_key" {}
+variable "porkbun_secret_api_key" {}
 
 # Cloud-Init Variables
 variable "repo_name" {
