@@ -1,7 +1,7 @@
 name: Bootstrap Cloud Server
 
 on:
-  workflow_call:
+  workflow_dispatch:
   repository_dispatch:
     types: [cloud_server_startup]
 
