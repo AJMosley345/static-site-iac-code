@@ -1,0 +1,14 @@
+---
+- name: Configure UFW rules
+  community.general.ufw:
+    rule: allow
+    name: "{{ item }}"
+  loop:
+    - OpenSSH
+    - 'Nginx Full'
+  tags: common-security
+
+- name: Enable UFW
+  community.general.ufw:
+    state: enabled
+  tags: common-security

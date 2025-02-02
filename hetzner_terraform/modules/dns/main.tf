@@ -78,7 +78,7 @@ resource "aws_route53_record" "aws_wildcard_cname_record" {
 }
 
 # Sets nameservers of the domain on Porkbun to point to the AWS Zone
-resource "porkbun_nameservers" "cloudflare_nameservers" {
+resource "porkbun_nameservers" "porkbun_nameservers" {
   domain = var.domain_name
   nameservers = [
     "anderson.ns.cloudflare.com",

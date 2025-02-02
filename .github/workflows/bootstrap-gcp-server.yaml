@@ -2,7 +2,8 @@ name: Bootstrap Cloud Server
 
 on:
   workflow_call:
-  workflow_dispatch:
+  repository_dispatch:
+    types: [cloud_server_startup]
 
 jobs:
   bootstrap:
@@ -24,33 +25,24 @@ jobs:
         id: ansible_config
         uses: satya-500/read-file-github-action@v1.0.0
         with:
-          path: ./ansible/ansible.cfg
+          path: ./gcp_ansible/ansible.cfg
       
-      - name: Set up Python and install Ansible
+      - name: Set up Python environment, install requirements for playbooks and add ansible to PATH
         uses: actions/setup-python@v4
         with:
           python-version: '3.12'
+          cache: 'pip'
+      - run: |
+          pip install -r ./gcp_ansible/requirements.txt
+          echo "$(python -m site --user-base)/bin" >> $GITHUB_PATH
 
-      - name: Install Ansible via pip and install hetzner.hcloud dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install ansible
-          python -m pip install requests
-          python -m pip install python-dateutil
-          python -m pip install paramiko
-      
-      - name: Add Ansible to PATH
-        run: echo "$(python -m site --user-base)/bin" >> $GITHUB_PATH
-      
       - name: Run playbook
         uses: dawidd6/action-ansible-playbook@v2
-        env:
-          HETZNER_API_TOKEN: ${{ secrets.HETZNER_API_TOKEN }}
         with:
           # Required, playbook filepath
           playbook: playbooks/bootstrap-server.yml
           # Optional, directory where playbooks live
-          directory: ./ansible
+          directory: ./gcp_ansible
           # Optional, ansible configuration file content (ansible.cfg)
           configuration: '${{ steps.ansible_config.outputs.contents }}'
           # Optional, SSH private key
@@ -66,7 +58,8 @@ jobs:
           # Optional, additional flags to pass to ansible-playbook
           options: |
               --verbose
-      
+              --check
+
       - name: Pull latest version of site down once Ansible setup is complete
         run: |
           # Set required variables

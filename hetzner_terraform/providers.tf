@@ -2,7 +2,7 @@ terraform {
   cloud {
     organization = "AJMosley"
     workspaces {
-      name = "static-site-iac-code"
+      name = "Static-Site-Hetzner"
     }
   }
   required_version = ">= 1.1.0"

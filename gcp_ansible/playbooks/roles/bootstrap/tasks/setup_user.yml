@@ -1,0 +1,26 @@
+---
+- name: "Set groups and add {{ user_name }}"
+  ansible.builtin.user:
+    name: "{{ user_name }}"
+    # On RedHat systems, we put the ansible user in the wheel group to
+    # work-around cPanel's open file limit of 100.  Mitogen uses file
+    # descriptors 100 and 101 for internal purposes.  See:
+    # https://github.com/dw/mitogen/issues/644
+    groups:
+      "{{ 'wheel' if ansible_facts['os_family'] == 'RedHat' else '' }}"
+    home: "/home/{{ user_name }}"
+
+- name: "Create authorized_keys for {{ user_name }}"
+  become: true
+  become_user: "{{ 'root' if ansible_check_mode else user_name }}"
+  ansible.posix.authorized_key:
+    user: "{{ user_name }}"
+    path: "/home/{{ user_name }}/.ssh/authorized_keys"
+    key: |
+      {{ lookup('file', user_name + '.pub') }}
+    exclusive: true
+
+- name: "Remove password for {{ user_name }}"
+  ansible.builtin.user:
+    name: "{{ user_name }}"
+    password: "*"

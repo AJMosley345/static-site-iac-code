@@ -1,0 +1,18 @@
+---
+- name: Explicitly gather facts
+  ansible.builtin.setup:
+
+- name: Install Node.js and npm
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  when: ansible_os_family == "Debian"
+  loop: "{{ website_node_packages }}"
+  tags: website-gatsby
+
+- name: Install Gatsby CLI globally
+  community.general.npm:
+    name: gatsby-cli
+    global: true
+  loop: "{{ website_global_npm_packages }}"
+  tags: website-gatsby

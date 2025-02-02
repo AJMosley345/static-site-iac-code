@@ -1,0 +1,49 @@
+---
+- name: Install Certbot using Snap
+  ansible.builtin.shell: |
+    snap install --classic certbot
+    ln -s /snap/bin/certbot /usr/bin/certbot
+  args:
+    creates: /usr/bin/certbot
+  tags: website-cert
+
+- name: Install Certbot Route 53 Plugin
+  ansible.builtin.shell: snap set certbot trust-plugin-with-root=ok && snap install certbot-dns-route53
+  args:
+    creates: /snap/bin/certbot-dns-route53
+  tags: website-cert
+
+- name: Create AWS credentials directory
+  ansible.builtin.file:
+    path: ~/.aws
+    state: directory
+    mode: "0700"
+  tags: website-cert
+
+- name: Copy AWS credentials config file
+  ansible.builtin.template:
+    src: config.j2
+    dest: ~/.aws/config
+    mode: "0600"
+  tags: website-cert
+
+- name: Issue Wildcard SSL Certificate
+  ansible.builtin.shell: |
+    certbot certonly --dns-route53 \
+        -d "*.{{ website_domain }}" \
+        -d "{{ website_domain }}" \
+        --non-interactive --agree-tos \
+        -m "{{ website_email }}" \
+        --keep-until-expiring
+  args:
+    creates: "/etc/letsencrypt/live/{{ website_domain }}/fullchain.pem"
+  tags: website-cert
+
+- name: Ensure Certbot Auto-Renewal is in Cron
+  ansible.builtin.cron:
+    name: "Certbot Auto-Renewal"
+    job: "certbot renew --quiet && systemctl reload nginx"
+    minute: "0"
+    hour: "3"
+    state: present
+  tags: website-cert

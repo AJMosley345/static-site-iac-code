@@ -1,0 +1,12 @@
+---
+- name: Configure Gatsby
+  ansible.builtin.include_tasks: configure_gatsby.yml
+
+- name: Configure git repo and site path
+  ansible.builtin.include_tasks: configure_git.yml
+
+- name: Deploy the Nginx configuration
+  ansible.builtin.include_tasks: deploy_nginx_site.yml
+
+- name: Setup Let's Encrpyt certs
+  ansible.builtin.include_tasks: configure_certbot.yml

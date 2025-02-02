@@ -1,0 +1,16 @@
+---
+- name: Bootstrap Cloud Server
+  hosts: all
+  become: true
+
+  roles:
+    - role: bootstrap
+      tags: bootstrap
+    - role: common
+      tags: common
+    - role: website
+      tags: website
+
+  tasks:
+    - name: Reboot server once roles are done
+      ansible.builtin.reboot:
