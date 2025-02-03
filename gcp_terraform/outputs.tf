@@ -10,3 +10,13 @@ output "gcp_static_ip" {
   description = "Static ip of the server in GCP"
   value       = module.gcp.static_ip
 }
+output "tf_app_name" {
+  value = var.tf_app_name
+}
+output "secret_name" {
+  value = var.secret_name
+}
+output "gcp_dynamic_secret" {
+  value = data.hcp_vault_secrets_dynamic_secret.gcp_dynamic_secret.secret_values
+  sensitive = true
+}
