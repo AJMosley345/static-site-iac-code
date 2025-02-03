@@ -10,7 +10,6 @@ variable "repo_name" {}
 variable "project_id" {}
 variable "server_name" {}
 variable "machine_type" {}
-variable "region" {}
 variable "zone" {}
 variable "os_image" {}
 variable "allowed_ports" {}

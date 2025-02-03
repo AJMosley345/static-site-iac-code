@@ -11,7 +11,6 @@ module "gcp" {
   source = "./modules/gcp"
    # Server creation variables
   server_name          = var.server_name
-  region               = var.gcp_region
   zone                 = var.zone
   machine_type         = var.machine_type
   os_image             = var.os_image

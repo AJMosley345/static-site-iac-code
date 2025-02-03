@@ -2,7 +2,6 @@
 resource "google_compute_address" "static_ip" {
   project  = var.project_id
   name     = var.server_name
-  region   = var.region
 }
 
 # Sets up a firewall for the server that only allows traffic from Tailscale (41641), Port 80 and Port 443 (for website traffic)

@@ -38,10 +38,6 @@ variable "repo_name" {
 variable "project_name" {
   type = string
 }
-variable "gcp_region" {
-  description = "Default region to create the GCP resources in"
-  type = string
-}
 variable "server_name" {
   description = "Name of the server"
   type        = string
