@@ -38,11 +38,11 @@ data "hcp_vault_secrets_dynamic_secret" "gcp_dynamic_secret" {
   secret_name = var.secret_name
 }
 # Uses the dynamic secret from HVS to authenticate with the needed permissions to create the resources
-provider "google" {
-  alias        = "dynamic_secret"
-  access_token = data.hcp_vault_secrets_dynamic_secret.gcp_dynamic_secret.secret_values["access_token"]
-  zone         = var.zone
-}
+# provider "google" {
+#   alias        = "dynamic_secret"
+#   access_token = data.hcp_vault_secrets_dynamic_secret.gcp_dynamic_secret.secret_values["access_token"]
+#   zone         = var.zone
+# }
 provider "porkbun" {}
 provider "tailscale" {}
 provider "aws" {
