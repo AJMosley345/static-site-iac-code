@@ -1,38 +1,39 @@
-module "network" {
-  source        = "./modules/network"
-  server_name   = var.server_name
-  region        = var.region
-  allowed_ports = var.allowed_ports
+data "google_project" "project_id" {
+  provider = google.dynamic_secret
+}
+module "aws" {
+  source      = "./modules/aws"
+  domain_name = var.domain_name
+  static_ip   = module.gcp.static_ip
 }
 
-module "dns" {
-  source              = "./modules/dns"
-  domain_name         = var.domain_name
-  porkbun_nameservers = var.porkbun_nameservers
-  static_ip           = module.network.static_ip
-}
-
-module "compute" {
-  source       = "./modules/compute"
-  # Server creation variables
-  server_name  = var.server_name
-  zone         = var.zone
-  machine_type = var.machine_type
-  os_image     = var.os_image
-  static_ip    = module.network.static_ip
-  gsa_email    = google_service_account.static_site_sa.email
-
+module "gcp" {
+  source = "./modules/gcp"
+   # Server creation variables
+  server_name          = var.server_name
+  region               = var.gcp_region
+  zone                 = var.zone
+  machine_type         = var.machine_type
+  os_image             = var.os_image
+  allowed_ports        = var.allowed_ports
+  project_id           = data.google_project.project_id.id
   # Startup Script Variables
   ansible_user_ssh_key = var.ansible_user_ssh_key
   personal_user        = var.personal_user
-  tailscale_auth_key   = module.auth.tailscale_tailnet_key
+  tailscale_auth_key   = var.tailscale_auth_key
   github_pa_token      = var.github_pa_token
+  repo_owner           = var.repo_owner
   repo_name            = var.repo_name
+}
+
+module "porkbun" {
+  source       = "./modules/porkbun"
+  domain_name  = var.domain_name
+  name_servers = module.aws.aws_domain_zone_name_servers
 }
 
 module "tailscale" {
   source            = "./modules/tailscale"
   tailscale_tailnet = var.tailscale_tailnet
-  server_name       = var.server_name
   tailscale_tag     = var.tailscale_tag
 }

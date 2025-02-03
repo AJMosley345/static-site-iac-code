@@ -9,34 +9,42 @@ terraform {
   required_providers {
     porkbun = {
       source = "kyswtn/porkbun"
-      version = "0.1.3"
+      version = ">= 0.1.3"
     }
     aws = {
       source = "hashicorp/aws"
-      version = "5.84.0"
+      version = ">= 5.84.0"
     }
     google = {
       source = "hashicorp/google"
-      version = "6.18.1"
+      version = ">= 6.18.1"
     }
     tailscale = {
       source = "tailscale/tailscale"
-      version = "0.17.2"
+      version = ">= 0.17.2"
+    }
+    hcp = {
+      source = "hashicorp/hcp"
+      version = ">= 0.102.0"
     }
   }
 }
 
 # Providers are getting the appropriate variables through HCP Vault Secrets and Terraform integration.
-provider "porkbun" {
-  api_key = var.porkbun_api_key
-  secret_api_key = var.porkbun_secret_api_key
+provider "hcp" {}
+# Getting the dynamic secret from HCP Vault Secrets
+data "hcp_vault_secrets_dynamic_secret" "gcp_dynamic_secret" {
+  app_name    = var.tf_app_name
+  secret_name = var.secret_name
 }
-provider "google" {}
+# Uses the dynamic secret from HVS to authenticate with the needed permissions to create the resources
+provider "google" {
+  alias        = "dynamic_secret"
+  access_token = data.hcp_vault_secrets_dynamic_secret.gcp_dynamic_secret.secret_values["access_token"]
+  zone         = var.zone
+}
+provider "porkbun" {}
 provider "tailscale" {}
-provider "aws" {}
-
-# Creates a custom google service account just for creating the resources
-resource "google_service_account" "static_site_sa" {
-  account_id = "static-site-sa"
-  display_name = "Static Site Service Account"
+provider "aws" {
+  region = var.aws_region
 }

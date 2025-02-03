@@ -1,31 +1,26 @@
-name: Bootstrap Cloud Server
+name: Bootstrap GCP Cloud Server
 
 on:
   workflow_dispatch:
   repository_dispatch:
-    types: [cloud_server_startup]
+    types: [gcp_cloud_server_startup]
 
 jobs:
   bootstrap:
     name: Bootstrap Server
     runs-on: ubuntu-latest
+    environment: Google Cloud
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
       - name: Connect to Tailscale network to allow access to server
         uses: tailscale/github-action@v3
         with:
-          oauth-client-id: ${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
-          oauth-secret: ${{ secrets.TAILSCALE_OAUTH_SECRET }}
-          tags: tag:ansible
-      
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Get contents of ansible.cfg to feed to ansible playbook step
-        id: ansible_config
-        uses: satya-500/read-file-github-action@v1.0.0
-        with:
-          path: ./gcp_ansible/ansible.cfg
+          oauth-client-id: ${{ secrets.GCP_TAILSCALE_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.GCP_TAILSCALE_OAUTH_CLIENT_SECRET }}
+          tags: ${{ vars.GCP_TAILSCALE_ANSIBLE_TAG }}
       
       - name: Set up Python environment, install requirements for playbooks and add ansible to PATH
         uses: actions/setup-python@v4
@@ -35,7 +30,6 @@ jobs:
       - run: |
           pip install -r ./gcp_ansible/requirements.txt
           echo "$(python -m site --user-base)/bin" >> $GITHUB_PATH
-          python3 ./gcp_ansible/inventory/tailscale/tailscale_inventory.py
 
       - name: Run playbook
         uses: dawidd6/action-ansible-playbook@v2
@@ -45,22 +39,17 @@ jobs:
           # Optional, directory where playbooks live
           directory: ./gcp_ansible
           # Optional, ansible configuration file content (ansible.cfg)
-          configuration: '${{ steps.ansible_config.outputs.contents }}'
+          # configuration:
           # Optional, SSH private key
-          key: ${{ secrets.ANSIBLE_USER_SSH_PRIVATE_KEY }}
-          # Optional, literal inventory file contents
-          # inventory:
-          # Optional, SSH known hosts file content
-          # known_hosts:
+          key: ${{ secrets.GCP_ANSIBLE_USER_SSH_KEY }}
           # Optional, encrypted vault password
-          vault_password: ${{secrets.ANSIBLE_VAULT_PASSWORD}}
+          vault_password: ${{ secrets.GCP_ANSIBLE_VAULT_PASS }}
           # Optional, galaxy requirements filepath
           requirements: requirements.yml
           # Optional, additional flags to pass to ansible-playbook
           options: |
               -vvvv
               --check
-              -i inventory/tailscale/tailscale_inventory.py
 
       # - name: Pull latest version of site down once Ansible setup is complete
       #   run: |

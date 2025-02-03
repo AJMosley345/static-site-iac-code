@@ -1,6 +1,6 @@
 ---
-- name: Bootstrap Cloud Server
-  hosts: all
+- name: Bootstrap Cloud Server based on Tailscale tag
+  hosts: "tag_{{ lookup('env', 'ANSIBLE_TAG_FILTER') }}"
   become: true
 
   roles:

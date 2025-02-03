@@ -1,22 +1,10 @@
-# Route 53/Porkbun Variables
+# AWS Route 53/Porkbun Variables
 variable "domain_name" {
   description = "Domain name (i.e. google.com)"
   type        = string
 }
-variable "porkbun_nameservers" {
-  description = "Nameservers to point Porkbun domain to"
-  type        = list(string)
-  default     = [ 
-    "anderson.ns.cloudflare.com",
-    "evelyn.ns.cloudflare.com"
-  ]
-}
-variable "porkbun_api_key" {
-  description = "Stand in variable for the Porkbun api key"
-  type        = string
-}
-variable "porkbun_secret_api_key" {
-  description = "Stand in variable for the Porkbun api secret key"
+variable "aws_region" {
+  description = "AWS region to create resources in"
   type        = string
 }
 
@@ -37,12 +25,23 @@ variable "github_pa_token" {
   description = "Stand in variable for the GitHub personal access token"
   type        = string
 }
+variable "repo_owner" {
+  description = "Name of the repo owner"
+  type = string
+}
 variable "repo_name" {
   description = "Name of the repo to use the command on in the form of repo/your-repo"
   type        = string
 }
 
 # GCP Variables
+variable "project_name" {
+  type = string
+}
+variable "gcp_region" {
+  description = "Default region to create the GCP resources in"
+  type = string
+}
 variable "server_name" {
   description = "Name of the server"
   type        = string
@@ -59,10 +58,6 @@ variable "os_image" {
   description = "OS image to use"
   type        = string
 }
-variable "region" {
-  description = "Name of the region to host the server in"
-  type        = string
-}
 variable "allowed_ports" {
   description = "Ports that are allowed by the firewall"
   type = list(object({
@@ -70,16 +65,10 @@ variable "allowed_ports" {
     ports    = list(string)
   }))
   default = [ 
-    {
-      protocol = "tcp"
-      ports = [ "80", "443" ]
-    },
-    {
-      protocol = "udp"
-      ports = [ "41641" ]
-    }
+    
   ]
 }
+
 # Tailscale Variables
 variable "tailscale_tailnet" {
   description = "Tailnet for the Tailscale account"
@@ -87,4 +76,14 @@ variable "tailscale_tailnet" {
 }
 variable "tailscale_tag" {
   description = "Tag to auto apply to devices authorized with the created Tailscale auth token"
+  type = string
+}
+
+# HCP Vault Secrets Variables
+variable "tf_app_name" {
+  type = string
+}
+variable "secret_name" {
+  description = "Name of the secret to get from the app"
+  type = string
 }
