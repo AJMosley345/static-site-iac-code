@@ -5,7 +5,6 @@ module "aws" {
   source      = "./modules/aws"
   domain_name = var.domain_name
   static_ip   = var.current_static_ip
-  //module.gcp.static_ip
 }
 
 module "gcp" {
