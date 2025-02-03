@@ -4,7 +4,8 @@ data "google_project" "project_id" {
 module "aws" {
   source      = "./modules/aws"
   domain_name = var.domain_name
-  static_ip   = module.gcp.static_ip
+  static_ip   = var.current_static_ip
+  //module.gcp.static_ip
 }
 
 module "gcp" {
@@ -17,6 +18,7 @@ module "gcp" {
   os_image             = var.os_image
   allowed_ports        = var.allowed_ports
   project_id           = data.google_project.project_id.id
+
   # Startup Script Variables
   ansible_user_ssh_key = var.ansible_user_ssh_key
   personal_user        = var.personal_user

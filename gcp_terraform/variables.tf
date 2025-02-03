@@ -87,3 +87,9 @@ variable "secret_name" {
   description = "Name of the secret to get from the app"
   type = string
 }
+
+# Current static IP of my webserver
+variable "current_static_ip" {
+  description = "Current static IP of my webserver"
+  type = string
+}
