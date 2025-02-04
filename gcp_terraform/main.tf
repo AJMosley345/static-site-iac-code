@@ -1,5 +1,5 @@
 data "google_project" "project_id" {
-  provider = google.dynamic_secret
+  provider = google
 }
 module "aws" {
   source      = "./modules/aws"
@@ -9,7 +9,7 @@ module "aws" {
 
 module "gcp" {
   source = "./modules/gcp"
-   # Server creation variables
+  # Server creation variables
   server_name          = var.server_name
   zone                 = var.zone
   machine_type         = var.machine_type

@@ -1,11 +1,13 @@
 # Creates a static ip address for the cloud server
 resource "google_compute_address" "static_ip" {
+  provider = google
   project  = var.project_id
   name     = var.server_name
 }
 
 # Sets up a firewall for the server that only allows traffic from Tailscale (41641), Port 80 and Port 443 (for website traffic)
 resource "google_compute_firewall" "static_site_firewall" {
+  provider = google
   project  = var.project_id
   name     = var.server_name
   network  = "default"
@@ -23,6 +25,7 @@ resource "google_compute_firewall" "static_site_firewall" {
 
 # Creates the Google Cloud compute instance for the webserver
 resource "google_compute_instance" "gcp_webserver" {
+  provider = google
   project      = var.project_id
   name         = var.server_name
   machine_type = var.machine_type
