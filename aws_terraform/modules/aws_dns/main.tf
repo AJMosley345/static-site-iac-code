@@ -2,10 +2,14 @@
 resource "aws_route53_zone" "main_domain_zone" {
   provider    = aws
   name        = var.domain_name
-  tags        = {
-    "Name"    = var.domain_name,
-    "Purpose" = "Webserver"
-  }
+  tags = merge(
+    var.tags,
+    {
+      Name    = "main_domain_zone"
+      Module  = "aws_dns"
+      Domain  = var.domain_name
+    }
+  )
 }
 # Creates the appropriate records 
 resource "aws_route53_record" "aws_webserver_record" {
