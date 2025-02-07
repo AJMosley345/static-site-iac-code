@@ -344,3 +344,8 @@ run_scripts/
 packer/
 # ACL file for Tailscale
 tailscale-acls.jsonc
+
+# Github Webhook Trigger Files
+EC2StartupWebhookTrigger.*
+trigger_github_*
+create-ec2-instance
