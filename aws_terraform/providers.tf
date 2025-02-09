@@ -19,6 +19,10 @@ terraform {
       source = "tailscale/tailscale"
       version = ">= 0.17.2"
     }
+    hcp = {
+      source = "hashicorp/hcp"
+      version = "0.102.0"
+    }
   }
 }
 
@@ -26,3 +30,4 @@ terraform {
 provider "porkbun" {}
 provider "tailscale" {}
 provider "aws" {}
+provider "hcp" {}

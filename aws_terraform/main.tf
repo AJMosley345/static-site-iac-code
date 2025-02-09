@@ -48,7 +48,9 @@ module "aws_network" {
 
 module "aws_vm" {
   source                 = "./modules/aws_vm"
-  image_name             = var.image_name
+  bucket_name            = var.bucket_name
+  channel_name           = var.channel_name
+  region                 = var.region
   instance_type          = var.instance_type
   instance_name          = var.instance_name
   subnet_id              = module.aws_network.public_subnet_id

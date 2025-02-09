@@ -123,11 +123,18 @@ variable "ingress_rules" {
 }
 
 # AWS VM Variables (aws_vm)
-variable "image_name" {
-  description = "Name of the Packer AMI to use"
+variable "bucket_name" {
+  description = "Name of the Packer bucket"
   type        = string
 }
-
+variable "channel_name" {
+  description = "Name of the image channel in the Packer bucket"
+  type        = string
+}
+variable "region" {
+  description = "Region that the AMI is stored in"
+  type        = string
+}
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string
