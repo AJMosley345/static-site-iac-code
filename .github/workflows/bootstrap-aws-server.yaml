@@ -3,13 +3,13 @@ name: Bootstrap GCP Cloud Server
 on:
   workflow_dispatch:
   repository_dispatch:
-    types: [gcp_cloud_server_startup]
+    types: [aws_cloud_server_startup]
 
 jobs:
   bootstrap:
     name: Bootstrap Server
     runs-on: ubuntu-latest
-    environment: Google Cloud
+    environment: AWS
 
     steps:
       - name: Checkout repository
@@ -18,9 +18,9 @@ jobs:
       - name: Connect to Tailscale network to allow access to server
         uses: tailscale/github-action@v3
         with:
-          oauth-client-id: ${{ secrets.GCP_TAILSCALE_OAUTH_CLIENT_ID }}
-          oauth-secret: ${{ secrets.GCP_TAILSCALE_OAUTH_CLIENT_SECRET }}
-          tags: ${{ vars.GCP_TAILSCALE_ANSIBLE_TAG }}
+          oauth-client-id: ${{ secrets.AWS_TAILSCALE_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.AWS_TAILSCALE_OAUTH_CLIENT_SECRET }}
+          tags: ${{ vars.AWS_TAILSCALE_ANSIBLE_TAG }}
       
       - name: Set up Python environment, install requirements for playbooks and add ansible to PATH
         uses: actions/setup-python@v4
@@ -41,9 +41,9 @@ jobs:
           # Optional, ansible configuration file content (ansible.cfg)
           # configuration:
           # Optional, SSH private key
-          key: ${{ secrets.GCP_ANSIBLE_USER_SSH_KEY }}
+          key: ${{ secrets.AWS_ANSIBLE_USER_SSH_KEY }}
           # Optional, encrypted vault password
-          vault_password: ${{ secrets.GCP_ANSIBLE_VAULT_PASS }}
+          vault_password: ${{ secrets.AWS_ANSIBLE_VAULT_PASSWORD }}
           # Optional, galaxy requirements filepath
           requirements: requirements.yml
           # Optional, additional flags to pass to ansible-playbook
