@@ -32,6 +32,8 @@ jobs:
           echo "$(python -m site --user-base)/bin" >> $GITHUB_PATH
 
       - name: Run playbook
+        env:
+          ANSIBLE_TAG_FILTER: ${{ vars.AWS_TAILSCALE_TAG }}
         uses: dawidd6/action-ansible-playbook@v2
         with:
           # Required, playbook filepath
