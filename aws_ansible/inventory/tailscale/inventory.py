@@ -28,7 +28,6 @@ import platform
 import subprocess
 import sys
 from typing import Any, Dict, List, TypedDict, Union
-import yaml
 
 ansible_inventory_type = Dict[str, Dict[str, Union[List[str], Dict[str, Any]]]]
 

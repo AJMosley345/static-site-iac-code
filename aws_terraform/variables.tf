@@ -135,6 +135,7 @@ variable "region" {
   description = "Region that the AMI is stored in"
   type        = string
 }
+
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string
@@ -145,6 +146,10 @@ variable "instance_name" {
   type        = string
 }
 
+variable "tailscale_auth_key" {
+  description = "Auth key to allow auto approval to Tailscale network"
+  type        = string
+}
 # Tailscale Variables
 variable "tailscale_tailnet" {
   description = "Tailnet for the Tailscale account"

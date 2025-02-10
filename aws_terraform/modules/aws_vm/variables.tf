@@ -5,4 +5,5 @@ variable "instance_name" {}
 variable "instance_type" {}
 variable "subnet_id" {}
 variable "vpc_security_group_id" {}
+variable "tailscale_auth_key" {}
 variable "tags" {}

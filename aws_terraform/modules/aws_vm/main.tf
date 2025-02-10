@@ -18,6 +18,9 @@ resource "aws_instance" "ec2_instance" {
     #cloud-config
     hostname: ${var.instance_name}
     manage_etc_hosts: true
+
+    runcmd:
+      - sudo tailscale up --auth-key=${var.tailscale_auth_key} --ssh
 USER_DATA
 
   tags = merge(
