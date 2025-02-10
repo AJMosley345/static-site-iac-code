@@ -25,7 +25,7 @@ module "aws_lambda" {
   event_rule_description = var.event_rule_description
   event_pattern          = var.event_pattern
   event_target_id        = var.event_target_id
-
+  server_name            = var.instance_name 
   # Lambda Permission
   statement_id             = var.lambda_permission_statement_id
   lambda_permission_action = var.lambda_permission_action

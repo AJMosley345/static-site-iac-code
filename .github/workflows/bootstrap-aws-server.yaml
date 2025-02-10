@@ -1,4 +1,4 @@
-name: Bootstrap GCP Cloud Server
+name: Bootstrap AWS Cloud Server
 
 on:
   workflow_dispatch:

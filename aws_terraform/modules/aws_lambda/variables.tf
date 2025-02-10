@@ -13,5 +13,5 @@ variable "event_target_id" {}
 variable "statement_id" {}
 variable "lambda_permission_action" {}
 variable "principal" {}
-
+variable "server_name" {}
 variable "tags" {}
