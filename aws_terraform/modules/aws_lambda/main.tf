@@ -19,6 +19,7 @@ resource "aws_lambda_function" "enrich_ec2_tags" {
   runtime          = "python3.12"
   filename         = data.archive_file.enrich_ec2_tags_zip.output_path
   source_code_hash = filebase64sha256(data.archive_file.enrich_ec2_tags_zip.output_path)
+  timeout          = 900
   lifecycle {
     replace_triggered_by = [ terraform_data.replacement ]
   }
@@ -38,7 +39,7 @@ resource "aws_lambda_function" "trigger_github_webhook" {
   runtime          = "python3.12"
   filename         = data.archive_file.github_webhook_zip.output_path
   source_code_hash = filebase64sha256(data.archive_file.github_webhook_zip.output_path)
-
+  timeout          = 900
   environment {
     variables = {
       GITHUB_WEBHOOK_URL    = var.github_webhook_url
@@ -113,6 +114,9 @@ resource "aws_lambda_permission" "allow_cloudwatch_enrich" {
   function_name = aws_lambda_function.enrich_ec2_tags.function_name
   principal     = var.principal
   source_arn    = aws_cloudwatch_event_rule.ec2_state_change.arn
+  lifecycle {
+    replace_triggered_by = [ terraform_data.replacement ]
+  }
 }
 
 # Grants EventBridge permission to invoke the trigger_github_webhook Lambda function
@@ -122,12 +126,15 @@ resource "aws_lambda_permission" "allow_cloudwatch_github" {
   function_name = aws_lambda_function.trigger_github_webhook.function_name
   principal     = var.principal
   source_arn    = aws_cloudwatch_event_rule.filter_enriched_ec2_events.arn
+  lifecycle {
+    replace_triggered_by = [ terraform_data.replacement ]
+  }
 }
 
 # Just to trigger a recreation of the Lambda functions when the python files change
 resource "terraform_data" "replacement" {
   input = [
-    sha256(file("${path.module}/lambda_functions/enrich_ec2_tags.py")),
-    sha256(file("${path.module}/lambda_functions/${var.source_file_name}")),
+    filebase64sha256("${path.module}/lambda_functions/enrich_ec2_tags.py"),
+    filebase64sha256("${path.module}/lambda_functions/${var.source_file_name}"),
   ]
 }

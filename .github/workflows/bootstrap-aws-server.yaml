@@ -28,7 +28,7 @@ jobs:
           python-version: '3.12'
           cache: 'pip'
       - run: |
-          pip install -r ./gcp_ansible/requirements.txt
+          pip install -r ./aws_ansible/requirements.txt
           echo "$(python -m site --user-base)/bin" >> $GITHUB_PATH
 
       - name: Run playbook
@@ -37,7 +37,7 @@ jobs:
           # Required, playbook filepath
           playbook: playbooks/bootstrap-server.yml
           # Optional, directory where playbooks live
-          directory: ./gcp_ansible
+          directory: ./aws_ansible
           # Optional, ansible configuration file content (ansible.cfg)
           # configuration:
           # Optional, SSH private key
