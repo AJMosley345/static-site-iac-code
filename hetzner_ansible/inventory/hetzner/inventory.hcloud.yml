@@ -1,7 +1,0 @@
-plugin: hetzner.hcloud.hcloud
-api_token: "{{ lookup('env', 'HETZNER_API_TOKEN') }}"
-keyed_groups:
-  - key: labels.role
-    prefix: ssh_ip
-compose:
-  ansible_host: "'{{ labels.ssh_ip | default(ipv4) }}'"

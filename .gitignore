@@ -338,3 +338,14 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Files for running locally
+run_scripts/
+packer/
+
+# ACL file for Tailscale
+tailscale-acls.jsonc
+
+# Github Webhook Trigger Files
+lambda_functions
+*.zip

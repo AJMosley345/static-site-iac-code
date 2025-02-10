@@ -1,0 +1,66 @@
+name: Bootstrap AWS Cloud Server
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [aws_cloud_server_startup]
+
+jobs:
+  bootstrap:
+    name: Bootstrap Server
+    runs-on: ubuntu-latest
+    environment: AWS
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Connect to Tailscale network to allow access to server
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.AWS_TAILSCALE_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.AWS_TAILSCALE_OAUTH_CLIENT_SECRET }}
+          tags: ${{ vars.AWS_TAILSCALE_ANSIBLE_TAG }}
+      
+      - name: Set up Python environment, install requirements for playbooks and add ansible to PATH
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+      - run: |
+          pip install -r ./gcp_ansible/requirements.txt
+          echo "$(python -m site --user-base)/bin" >> $GITHUB_PATH
+
+      - name: Run playbook
+        uses: dawidd6/action-ansible-playbook@v2
+        with:
+          # Required, playbook filepath
+          playbook: playbooks/bootstrap-server.yml
+          # Optional, directory where playbooks live
+          directory: ./gcp_ansible
+          # Optional, ansible configuration file content (ansible.cfg)
+          # configuration:
+          # Optional, SSH private key
+          key: ${{ secrets.AWS_ANSIBLE_USER_SSH_KEY }}
+          # Optional, encrypted vault password
+          vault_password: ${{ secrets.AWS_ANSIBLE_VAULT_PASSWORD }}
+          # Optional, galaxy requirements filepath
+          requirements: requirements.yml
+          # Optional, additional flags to pass to ansible-playbook
+          options: |
+              -vvvv
+              --check
+
+      # - name: Pull latest version of site down once Ansible setup is complete
+      #   run: |
+      #     # Set required variables
+      #     repo_owner="${{ github.repository_owner }}"
+      #     repo_name="${{ vars.WEBSITE_REPO_NAME }}"
+      #     event_type="latest-website"
+
+      #     curl -L \
+      #       -X POST \
+      #       -H "Accept: application/vnd.github+json" \
+      #       -H "Authorization: Bearer ${{ secrets.WEBSITE_WEBHOOK_PAT }}" \
+      #       https://api.github.com/repos/$repo_owner/$repo_name/dispatches \
+      #       -d "{\"event_type\": \"$event_type\"}"
