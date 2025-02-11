@@ -3,40 +3,40 @@
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    owner: "{{ website_git_username }}"
-    group: "{{ website_git_username }}"
+    owner: "{{ gatsby_git_git_username }}"
+    group: "{{ gatsby_git_git_username }}"
     mode: '0755'
   loop:
-    - "{{ website_git_www_path }}"
+    - "{{ gatsby_git_git_www_path }}"
   tags: website-git
 
 - name: Initialize bare Git repository  # noqa: command-instead-of-module # Suppresses lint rule about using command module when a module is available
   ansible.builtin.command:
-    cmd: git init --initial-branch=main --bare {{ website_git_repo_path }}
+    cmd: git init --initial-branch=main --bare {{ gatsby_git_git_repo_path }}
   args:
-    creates: "{{ website_git_repo_path }}"
+    creates: "{{ gatsby_git_git_repo_path }}"
   tags: website-git
 
 - name: Set ownership of the Git repository
   ansible.builtin.file:
-    path: "{{ website_git_repo_path }}"
+    path: "{{ gatsby_git_git_repo_path }}"
     state: directory
     recurse: true
-    owner: "{{ website_git_username }}"
-    group: "{{ website_git_username }}"
+    owner: "{{ gatsby_git_git_username }}"
+    group: "{{ gatsby_git_git_username }}"
     mode: '0755'
   tags: website-git
 
 - name: Add Git post-receive hook
   ansible.builtin.copy:
-    dest: "{{ website_git_repo_path }}/hooks/post-receive"
+    dest: "{{ gatsby_git_git_repo_path }}/hooks/post-receive"
     content: |
       #!/bin/bash
       set -e
 
       # Define repo and website paths
-      GIT_REPO="{{ website_git_repo_path }}"
-      WORK_TREE="{{ website_git_www_path }}"
+      GIT_REPO="{{ gatsby_git_git_repo_path }}"
+      WORK_TREE="{{ gatsby_git_git_www_path }}"
 
       # Checkout the latest code
       cd $GIT_REPO
@@ -47,6 +47,6 @@
       yarn install --production
       yarn build
     mode: '0755'
-    owner: "{{ website_git_username }}"
-    group: "{{ website_git_username }}"
+    owner: "{{ gatsby_git_git_username }}"
+    group: "{{ gatsby_git_git_username }}"
   tags: website-git
