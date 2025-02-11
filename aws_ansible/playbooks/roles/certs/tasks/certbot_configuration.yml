@@ -13,7 +13,7 @@
     defaults_from: main
   vars:
     certbot_install_method: snap
-    cerbbot_admin_email: "{{ aws_creds.vault_email_address }}"
+    cerbbot_admin_email: "amosley220@outlook.com"
     certbot_create_if_missing: true
     certbot_create_standalone_stop_services: []
     certbot_certs:
