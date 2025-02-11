@@ -12,7 +12,7 @@
     name: geerlingguy.certbot
     defaults_from: main
   vars:
-    cerbbot_admin_email: "{{ aws_creds.vault_email_address }}"
+    certbot_admin_email: "{{ aws_creds.vault_email_address }}"
     certbot_create_if_missing: true
     certbot_create_standalone_stop_services: []
     certbot_certs:
