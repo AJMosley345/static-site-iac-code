@@ -17,6 +17,7 @@
     certbot_create_if_missing: true
     certbot_create_standalone_stop_services: []
     certbot_certs:
+      - email: "{{ aws_creds.vault_email_address }}"
       - domains:
           - "{{ domain_name }}"
     certbot_install_from_source: true
