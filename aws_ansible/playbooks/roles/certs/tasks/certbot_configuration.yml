@@ -11,7 +11,6 @@
   ansible.builtin.include_role:
     name: geerlingguy.certbot
     defaults_from: main
-    vars_from: vault.yml
   vars:
     certbot_install_method: snap
     cerbbot_admin_email: "{{ aws_creds.vault_email_addres }}"
