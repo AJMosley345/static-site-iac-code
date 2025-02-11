@@ -5,7 +5,7 @@
     name: "{{ item }}"
   loop:
     - OpenSSH
-    - 'Nginx Full'
+    - Nginx Full
   tags: common-security
 
 - name: Enable UFW
