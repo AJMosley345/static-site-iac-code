@@ -1,6 +1,6 @@
 ---
-- name: Explicitly gather facts for the role
-  gather_facts: true
+- name: Explicitly gather facts
+  ansible.builtin.setup:
 
 - name: Include geerlingguy.nginx role
   ansible.builtin.include_role:

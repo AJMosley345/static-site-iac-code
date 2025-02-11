@@ -1,6 +1,6 @@
 ---
-- name: Explicitly gather facts for the role
-  gather_facts: true
+- name: Explicitly gather facts
+  ansible.builtin.setup:
 
 - name: Include AWS credentials from vault to get email address
   ansible.builtin.include_vars:
