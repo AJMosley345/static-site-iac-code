@@ -6,10 +6,10 @@
     - vars/main-vars.yml
 
   roles:
-    # - role: common
-    #   tags: common
-    # - role: repo
-    #   tags: repo
+    - role: common
+      tags: common
+    - role: repo
+      tags: repo
     - role: geerlingguy.pip
     - { role: geerlingguy.certbot, certbot_certs: [] } # Just install certbot
     - role: certs
