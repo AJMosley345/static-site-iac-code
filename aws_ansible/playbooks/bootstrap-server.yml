@@ -1,6 +1,7 @@
 ---
 - name: Bootstrap Cloud Server based on Tailscale tag
   hosts: "tag_{{ lookup('env', 'ANSIBLE_TAG_FILTER') }}"
+  gather_facts: true
   become: true
   vars_files:
     - vars/main-vars.yml
