@@ -13,7 +13,7 @@
     defaults_from: main
   vars:
     certbot_install_method: snap
-    cerbbot_admin_email: "amosley220@outlook.com"
+    cerbbot_admin_email: "{{ aws_creds.vault_email_address }}"
     certbot_create_if_missing: true
     certbot_create_standalone_stop_services: []
     certbot_certs:
@@ -25,3 +25,4 @@
     certbot_auto_renew_hour: "3"
     certbot_auto_renew_minute: "30"
     certbot_auto_renew_options: "--quiet"
+    certbot_create_command: "{{ certbot_script }} certonly --standalone --noninteractive --agree-tos --email {{ cert_item.email | default(certbot_admin_email) }} -d {{ cert_item.domains | join(',') }}"
