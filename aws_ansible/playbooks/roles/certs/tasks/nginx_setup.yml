@@ -3,6 +3,7 @@
   ansible.builtin.include_role:
     name: geerlingguy.nginx
     defaults_from: main
+  gather_facts: true
   vars:
     nginx_vhosts:
       - listen: "443 ssl http2"
