@@ -16,7 +16,6 @@
     certbot_create_if_missing: true
     certbot_create_standalone_stop_services: []
     certbot_certs:
-      - email: "amosley220@outlook.com"
       - domains:
           - "ajmosley.com"
     certbot_auto_renew: true
