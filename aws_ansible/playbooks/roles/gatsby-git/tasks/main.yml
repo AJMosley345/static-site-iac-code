@@ -1,0 +1,6 @@
+---
+- name: Configure Gatsby
+  ansible.builtin.include_tasks: configure_gatsby.yml
+
+- name: Configure git repo and site path
+  ansible.builtin.include_tasks: configure_git.yml

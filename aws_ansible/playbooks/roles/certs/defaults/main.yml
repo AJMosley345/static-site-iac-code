@@ -1,0 +1,10 @@
+# Domain and Email Address
+domain_name: ajmosley.com
+email_address: "{{ vault_email }}"
+
+# AWS Credentials
+aws_access_key: "{{ vault_aws_access_key }}"
+aws_secret_key: "{{ vault_aws_secret_key }}"
+
+# Nginx Configuration
+letsencrypt_cert_path: /etc/letsencrypt/live/{{ domain_name }}

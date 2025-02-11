@@ -8,8 +8,10 @@
       tags: bootstrap
     - role: common
       tags: common
-    - role: website
+    - role: gatsby-git
       tags: website
+    - role: certs
+      tags: certs
 
   tasks:
     - name: Reboot server once roles are done
