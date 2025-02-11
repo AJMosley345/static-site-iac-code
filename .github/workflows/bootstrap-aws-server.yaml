@@ -51,7 +51,6 @@ jobs:
           # Optional, additional flags to pass to ansible-playbook
           options: |
               -vvvv
-              --check
 
       # - name: Pull latest version of site down once Ansible setup is complete
       #   run: |
