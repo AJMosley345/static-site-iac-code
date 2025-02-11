@@ -7,12 +7,12 @@
     name: "{{ item }}"
     state: present
   when: ansible_os_family == "Debian"
-  loop: "{{ gatsby_git_node_packages }}"
-  tags: website-gatsby
+  loop: "{{ repo_node_packages }}"
+  tags: repo-gatsby
 
 - name: Install Gatsby CLI globally
   community.general.npm:
     name: gatsby-cli
     global: true
-  loop: "{{ gatsby_git_global_npm_packages }}"
-  tags: website-gatsby
+  loop: "{{ repo_global_npm_packages }}"
+  tags: repo-gatsby

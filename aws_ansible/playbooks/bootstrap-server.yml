@@ -2,16 +2,20 @@
 - name: Bootstrap Cloud Server based on Tailscale tag
   hosts: "tag_{{ lookup('env', 'ANSIBLE_TAG_FILTER') }}"
   become: true
+  vars_files:
+    - vars/main-vars.yml
 
   roles:
-    # - role: bootstrap
-    #   tags: bootstrap
     # - role: common
     #   tags: common
-    # - role: gatsby-git
-    #   tags: website
+    # - role: repo
+    #   tags: repo
+    - role: geerlingguy.pip
+    - { role: geerlingguy.certbot, certbot_certs: [] } # Just install certbot
     - role: certs
       tags: certs
+    - geerlingguy.certbot # Creates the cert
+    - geerlingguy.nginx # Installs Nginx and the correct vhost
 
   tasks:
     - name: Reboot server once roles are done

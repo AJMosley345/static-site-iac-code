@@ -3,40 +3,40 @@
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    owner: "{{ gatsby_git_git_username }}"
-    group: "{{ gatsby_git_git_username }}"
+    owner: "{{ repo_git_username }}"
+    group: "{{ repo_git_username }}"
     mode: '0755'
   loop:
-    - "{{ gatsby_git_git_www_path }}"
-  tags: website-git
+    - "{{ repo_git_www_path }}"
+  tags: repo-git
 
 - name: Initialize bare Git repository  # noqa: command-instead-of-module # Suppresses lint rule about using command module when a module is available
   ansible.builtin.command:
-    cmd: git init --initial-branch=main --bare {{ gatsby_git_git_repo_path }}
+    cmd: git init --initial-branch=main --bare {{ repo_git_repo_path }}
   args:
-    creates: "{{ gatsby_git_git_repo_path }}"
-  tags: website-git
+    creates: "{{ repo_git_repo_path }}"
+  tags: repo-git
 
 - name: Set ownership of the Git repository
   ansible.builtin.file:
-    path: "{{ gatsby_git_git_repo_path }}"
+    path: "{{ repo_git_repo_path }}"
     state: directory
     recurse: true
-    owner: "{{ gatsby_git_git_username }}"
-    group: "{{ gatsby_git_git_username }}"
+    owner: "{{ repo_git_username }}"
+    group: "{{ repo_git_username }}"
     mode: '0755'
-  tags: website-git
+  tags: repo-git
 
 - name: Add Git post-receive hook
   ansible.builtin.copy:
-    dest: "{{ gatsby_git_git_repo_path }}/hooks/post-receive"
+    dest: "{{ repo_git_repo_path }}/hooks/post-receive"
     content: |
       #!/bin/bash
       set -e
 
       # Define repo and website paths
-      GIT_REPO="{{ gatsby_git_git_repo_path }}"
-      WORK_TREE="{{ gatsby_git_git_www_path }}"
+      GIT_REPO="{{ repo_git_repo_path }}"
+      WORK_TREE="{{ repo_git_www_path }}"
 
       # Checkout the latest code
       cd $GIT_REPO
@@ -47,6 +47,6 @@
       yarn install --production
       yarn build
     mode: '0755'
-    owner: "{{ gatsby_git_git_username }}"
-    group: "{{ gatsby_git_git_username }}"
-  tags: website-git
+    owner: "{{ repo_git_username }}"
+    group: "{{ repo_git_username }}"
+  tags: repo-git

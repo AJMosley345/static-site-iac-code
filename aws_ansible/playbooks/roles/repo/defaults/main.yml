@@ -1,0 +1,16 @@
+---
+# Gatsby task variables
+repo_node_packages:
+  - nodejs
+  - npm
+repo_global_npm_packages:
+  - gatsby-cli
+  - yarn
+  - corepack
+
+repo_domain_name: ajmosley.com
+
+# Git task variables
+repo_git_username: amosley
+repo_git_repo_path: /var/repos/{{ repo_domain_name }}.git
+repo_git_www_path: /var/www/{{ repo_domain_name }}

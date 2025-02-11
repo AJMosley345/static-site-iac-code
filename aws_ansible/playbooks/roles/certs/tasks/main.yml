@@ -1,8 +1,2 @@
-- name: AWS Credentials Setup
-  ansible.builtin.include_tasks: aws_credentials.yml
-
-- name: Nginx Configuration Setup
-  ansible.builtin.include_tasks: nginx_setup.yml
-
-- name: Certbot Configuration Setup
+- name: Certbot Setup
   ansible.builtin.include_tasks: certbot_configuration.yml

@@ -1,0 +1,22 @@
+---
+- name: Install certbot-dns-route53
+  ansible.builtin.shell: "cd /opt/certbot/certbot-dns-route53 && python setup.py install"
+
+- name: Create certbot settings folder
+  ansible.builtin.file:
+    path: /etc/letsencrypt/.aws
+    state: directory
+    owner: root
+    group: root
+    mode: '0700'
+
+- name: Create Certbot config files
+  ansible.builtin.template:
+    src: ""
+    dest: ""
+    owner: root
+    group: root
+    mode: '0600'
+  with_items:
+    - { src: 'files/templates/aws_credentials.j2', dest: '/etc/letsencrypt/.aws/config'}
+    - { src: 'files/templates/letsencrypt_cli.ini.j2', dest: '/etc/letsencrypt/cli.ini'}
