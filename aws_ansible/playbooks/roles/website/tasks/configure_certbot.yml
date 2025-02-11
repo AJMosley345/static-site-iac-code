@@ -1,16 +1,8 @@
 ---
-- name: Install Certbot using Snap
-  ansible.builtin.shell: |
-    snap install --classic certbot
-    ln -s /snap/bin/certbot /usr/bin/certbot
-  args:
-    creates: /usr/bin/certbot
-  tags: website-cert
-
-- name: Install Certbot Route 53 Plugin
-  ansible.builtin.shell: snap set certbot trust-plugin-with-root=ok && snap install certbot-dns-route53
-  args:
-    creates: /snap/bin/certbot-dns-route53
+- name: Include AWS credentials from vault
+  ansible.builtin.include_vars:
+    file: vault.yml
+    name: aws_creds
   tags: website-cert
 
 - name: Create AWS credentials directory
@@ -20,30 +12,71 @@
     mode: "0700"
   tags: website-cert
 
-- name: Copy AWS credentials config file
-  ansible.builtin.template:
-    src: config.j2
+- name: Write AWS credentials to config file
+  ansible.builtin.copy:
     dest: ~/.aws/config
+    content: |
+      [default]
+      aws_access_key_id={{ aws_creds.vault_aws_access_key }}
+      aws_secret_access_key={{ aws_creds.vault_aws_secret_key }}
     mode: "0600"
   tags: website-cert
 
-- name: Issue Wildcard SSL Certificate
-  ansible.builtin.shell: |
-    certbot certonly --dns-route53 \
-        -d "*.{{ website_domain }}" \
-        -d "{{ website_domain }}" \
-        --non-interactive --agree-tos \
-        -m "{{ website_email }}" \
-        --keep-until-expiring
-  args:
-    creates: "/etc/letsencrypt/live/{{ website_domain }}/fullchain.pem"
+- name: Install Certbot using Snap
+  community.general.snap:
+    name: certbot
+    classic: true
+  become: true
   tags: website-cert
 
-- name: Ensure Certbot Auto-Renewal is in Cron
-  ansible.builtin.cron:
-    name: "Certbot Auto-Renewal"
-    job: "certbot renew --quiet && systemctl reload nginx"
-    minute: "0"
-    hour: "3"
-    state: present
+- name: Install Certbot Route 53 Plugin
+  community.general.snap:
+    name: certbot-dns-route53
+  become: true
+  tags: website-cert
+
+- name: Issue Wildcard SSL Certificate
+  community.crypto.certbot_certonly:
+    email: "{{ website_email }}"
+    domains:
+      - "*.{{ website_domain }}"
+      - "{{ website_domain }}"
+    dns_route53: true
+    agree_tos: true
+    noninteractive: true
+    deploy_hook: "systemctl reload nginx"
+  notify: "reload nginx"
+  tags: website-cert
+
+- name: Create Certbot renewal service
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/certbot-renew.service
+    content: |
+      [Unit]
+      Description=Certbot Renewal
+
+      [Service]
+      ExecStart=/usr/bin/certbot renew --quiet --deploy-hook "systemctl reload nginx"
+  tags: website-cert
+
+- name: Create Certbot renewal timer
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/certbot-renew.timer
+    content: |
+      [Unit]
+      Description=Run Certbot Renewal Daily
+
+      [Timer]
+      OnCalendar=daily
+      Persistent=true
+
+      [Install]
+      WantedBy=timers.target
+  tags: website-cert
+
+- name: Enable and start Certbot renewal timer
+  ansible.builtin.systemd:
+    name: certbot-renew.timer
+    enabled: true
+    state: started
   tags: website-cert
