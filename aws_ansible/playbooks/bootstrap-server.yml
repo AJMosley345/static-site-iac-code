@@ -4,12 +4,12 @@
   become: true
 
   roles:
-    - role: bootstrap
-      tags: bootstrap
-    - role: common
-      tags: common
-    - role: gatsby-git
-      tags: website
+    # - role: bootstrap
+    #   tags: bootstrap
+    # - role: common
+    #   tags: common
+    # - role: gatsby-git
+    #   tags: website
     - role: certs
       tags: certs
 

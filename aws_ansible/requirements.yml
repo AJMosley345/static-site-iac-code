@@ -3,3 +3,4 @@ collections:
   - name: community.crypto
 roles:
   - name: geerlingguy.certbot
+  - name: geerlingguy.nginx
