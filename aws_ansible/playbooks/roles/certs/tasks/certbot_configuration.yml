@@ -1,11 +1,17 @@
 ---
+- name: Include AWS credentials from vault to get email address
+  ansible.builtin.include_vars:
+    file: vault.yml
+    name: aws_creds
+
 - name: Include geerlingguy.certbot role
   ansible.builtin.include_role:
     name: geerlingguy.certbot
     defaults_from: main
+    vars_from: vault.yml
     vars:
       certbot_install_method: snap
-      cerbbot_admin_email: "{{ email_addres }}"
+      cerbbot_admin_email: "{{ aws_creds.vault_email_addres }}"
       certbot_create_if_missing: true
       certbot_create_standalone_stop_services: []
       certbot_certs:
