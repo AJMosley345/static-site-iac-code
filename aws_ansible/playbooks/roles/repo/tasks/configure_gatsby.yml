@@ -39,7 +39,7 @@
   become: true
   become_user: amosley
   ansible.builtin.shell: >
-    echo $(which npm | xargs dirname)
+    echo $(which npm)
   args:
     executable: /bin/bash
   register: node_bin_path
@@ -51,6 +51,6 @@
   community.general.npm:
     name: "{{ item }}"
     global: true
-    executable: "{{ node_bin_path.stdout }}/npm"
+    executable: "{{ node_bin_path.stdout }}"
   loop: "{{ repo_global_npm_packages }}"
   tags: repo-gatsby
