@@ -2,9 +2,7 @@
 - name: Install Gatsby CLI, yarn, and corepack
   become: true
   become_user: amosley
-  community.general.npm:
-    name: "{{ item }}"
-    executable: "~/.nvm/versions/node/v22.14.0/bin/npm"
-    global: true
+  ansible.builtin.shell: |
+    npm install --global {{ item }}
   loop: "{{ repo_global_npm_packages }}"
   tags: repo-gatsby
