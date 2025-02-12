@@ -1,6 +1,6 @@
 # NVM Variables
 nvm_version: 'latest'
-nvm_node_version: 'latest'
+nvm_node_version: 'lts'
 nvm_force_install: true
 
 # Base Variables

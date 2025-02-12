@@ -18,16 +18,10 @@
       become_user: amosley
       environment:
         NVM_DIR: /home/amosley/.nvm
-    - role: stephdewit.nvm # Installs nvm for root
-      tags: repo
-      become: true
-      become_user: root
-      environment:
-        NVM_DIR: /home/root/.nvm
     - role: repo
       tags: repo
       become: true
-      become_user: root
+      become_user: amosley
 
     # Cert and Nginx setup
     - role: geerlingguy.pip
