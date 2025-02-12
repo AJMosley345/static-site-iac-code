@@ -20,5 +20,5 @@
     group: root
     mode: '0644'
   with_items:
-    - { src: 'aws_credentials.j2', dest: '/etc/letsencrypt/.aws/config' }
+    - { src: 'aws_config.j2', dest: '/etc/letsencrypt/.aws/config' }
     - { src: 'letsencrypt_cli.ini.j2', dest: '/etc/letsencrypt/cli.ini' }
