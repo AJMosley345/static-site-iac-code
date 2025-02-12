@@ -6,10 +6,10 @@
     - vars/main-vars.yml
 
   roles:
-    - role: common
-      tags: common
-      become: true
-      become_user: root
+    # - role: common
+    #   tags: common
+    #   become: true
+    #   become_user: root
 
     # Repo and website setup
     - role: repo
