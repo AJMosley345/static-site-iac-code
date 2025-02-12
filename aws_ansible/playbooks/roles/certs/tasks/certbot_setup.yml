@@ -1,11 +1,8 @@
 ---
-- name: Install certbot-dns-route53
-  community.general.snap:
-    name:
-      - certbot-dns-route53
-    classic: true
-    options:
-      - trust-plugin-with-root=ok
+- name: Set plugin to have classic containment, then install it
+  ansible.builtin.shell: |
+    snap set certbot trust-plugin-with-root=ok
+    snap install certbot-dns-route54
 
 - name: Create certbot settings folder
   ansible.builtin.file:
