@@ -30,8 +30,6 @@
     name: stephdewit.nvm
 
 - name: Explictly install the latest version of node.js and npm
-  become: true
-  become_user: amosley
   ansible.builtin.shell: |
     nvm install --lts
   args:
