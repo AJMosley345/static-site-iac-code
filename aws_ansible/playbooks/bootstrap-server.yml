@@ -12,10 +12,10 @@
     #   become_user: root
 
     # Repo and website setup
-    - role: repo
-      tags: repo
-      become: true
-      become_user: root
+    # - role: repo
+    #   tags: repo
+    #   become: true
+    #   become_user: root
 
     # Cert and Nginx setup
     - role: geerlingguy.pip

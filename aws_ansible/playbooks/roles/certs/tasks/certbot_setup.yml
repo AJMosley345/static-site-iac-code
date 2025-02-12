@@ -3,6 +3,7 @@
   community.general.snap:
     name:
       - certbot-dns-route53
+    classic: true
     options:
       - trust-plugin-with-root=ok
 
