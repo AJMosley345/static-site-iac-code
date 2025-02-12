@@ -1,18 +1,16 @@
 ---
-- name: Explicitly gather facts
-  ansible.builtin.setup:
-
-- name: Install Node.js and npm
-  ansible.builtin.apt:
-    name: "{{ item }}"
-    state: present
-  when: ansible_os_family == "Debian"
-  loop: "{{ repo_node_packages }}"
+- name: Install nvm, then install the latest versions of Node.js and npm
+  ansible.builtin.shell: |
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+    export NVM_DIR="$HOME/.nvm" [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+    nvm install --lts
+  args:
+    creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
   tags: repo-gatsby
 
-- name: Install Gatsby CLI globally
+- name: Install Gatsby CLI, yarn and corepack
   community.general.npm:
-    name: gatsby-cli
+    name: "{{ item }}"
     global: true
   loop: "{{ repo_global_npm_packages }}"
   tags: repo-gatsby

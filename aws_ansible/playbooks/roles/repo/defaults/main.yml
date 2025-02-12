@@ -1,8 +1,5 @@
 ---
 # Gatsby task variables
-repo_node_packages:
-  - nodejs
-  - npm
 repo_global_npm_packages:
   - gatsby-cli
   - yarn
