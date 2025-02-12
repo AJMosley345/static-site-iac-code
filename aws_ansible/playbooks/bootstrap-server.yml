@@ -2,21 +2,46 @@
 - name: Bootstrap Cloud Server based on Tailscale tag
   hosts: "tag_{{ lookup('env', 'ANSIBLE_TAG_FILTER') }}"
   gather_facts: true
-  become: true
   vars_files:
     - vars/main-vars.yml
 
   roles:
-    # - role: common
-    #   tags: common
+    - role: common
+      tags: common
+      become: true
+      become_user: root
+
+    # Repo and website setup
+    - role: stephdewit.nvm # Installs nvm for amosley
+      tags: repo
+      become: true
+      become_user: amosley
+      environment:
+        NVM_DIR: /home/amosley/.nvm
+    - role: stephdewit.nvm # Installs nvm for root
+      tags: repo
+      become: true
+      become_user: root
+      environment:
+        NVM_DIR: /home/root/.nvm
     - role: repo
       tags: repo
+      become: true
+      become_user: root
+
+    # Cert and Nginx setup
     - role: geerlingguy.pip
     - { role: geerlingguy.certbot, certbot_certs: [] } # Just install certbot
     - role: certs
       tags: certs
-    - geerlingguy.certbot # Creates the cert
-    - geerlingguy.nginx # Installs Nginx and the correct vhost
+      become: true
+      become_user: root
+    - role: geerlingguy.certbot # Creates the cert
+      tags: certs
+      become: true
+      become_user: root
+    - role: geerlingguy.nginx # Installs Nginx and the correct vhost
+      tags: certs
 
   tasks:
     - name: Reboot server once roles are done

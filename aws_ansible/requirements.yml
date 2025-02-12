@@ -5,3 +5,4 @@ roles:
   - name: geerlingguy.certbot
   - name: geerlingguy.nginx
   - name: geerlingguy.pip
+  - name: stephdewit.nvm

@@ -1,18 +1,3 @@
----
-- name: Install nvm
-  ansible.builtin.shell: |
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
-    export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-  # args:
-  #   creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
-  tags: repo-gatsby
-
-- name: Install Node.js and npm. Checks that they were installed properly
-  ansible.builtin.command:
-    cmd: nvm install --lts
-    creates: /**/.nvm/versions/node/**/{bin/node,lib/node_modules/npm}
-
 - name: Install Gatsby CLI, yarn and corepack
   community.general.npm:
     name: "{{ item }}"
