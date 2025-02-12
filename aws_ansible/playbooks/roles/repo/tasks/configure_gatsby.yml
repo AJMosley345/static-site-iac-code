@@ -24,12 +24,12 @@
     git config --global --add safe.directory '*'
 
 - name: Install nvm, node and npm
-  become: true
-  become_user: amosley
   ansible.builtin.include_role:
     name: stephdewit.nvm
 
 - name: Explictly install the latest version of node.js and npm
+  become: true
+  become_user: amosley
   ansible.builtin.shell: |
     nvm install --lts
   args:
