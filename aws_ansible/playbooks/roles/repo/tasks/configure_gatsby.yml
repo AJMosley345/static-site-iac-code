@@ -4,5 +4,7 @@
   become_user: amosley
   ansible.builtin.shell: |
     npm install --global {{ item }}
+  args:
+    executable: /bin/bash
   loop: "{{ repo_global_npm_packages }}"
   tags: repo-gatsby
