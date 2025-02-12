@@ -18,7 +18,7 @@ certbot_auto_renew_user: "{{ ansible_user | default(lookup('env', 'USER')) }}"
 certbot_auto_renew_hour: "3"
 certbot_auto_renew_minute: "30"
 certbot_auto_renew_options: "--quiet"
-certbot_create_command: "certbot certonly --noninteractive --dns-route53 --agree-tos --email {{ cert_item.email | default(certbot_admin_email) }} -d {{ cert_item.domains | join(',') }}"
+certbot_create_command: "{{ certbot_script }} certonly --noninteractive --dns-route53 --agree-tos --email {{ cert_item.email | default(certbot_admin_email) }} -d {{ cert_item.domains | join(',') }}"
 
 # AWS Credentials
 certs_aws_access_key_id: !vault |

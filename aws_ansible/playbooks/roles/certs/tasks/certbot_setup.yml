@@ -1,10 +1,4 @@
 ---
-- name: Install certbot
-  community.general.snap:
-    name:
-      - certbot
-    classic: true
-
 - name: Install certbot-dns-route53
   community.general.snap:
     name:
