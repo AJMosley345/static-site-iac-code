@@ -1,6 +1,24 @@
 ---
+- name: Install certbot
+  community.general.snap:
+    name:
+      - certbot
+    classic: true
+
 - name: Install certbot-dns-route53
-  ansible.builtin.shell: "cd /opt/certbot/certbot-dns-route53 && python setup.py install"
+  community.general.snap:
+    name:
+      - certbot-dns-route53
+    options:
+      - trust-plugin-with-root=ok
+
+- name: Create link between /snap/bin/certbot and /usr/bin/certbot
+  ansible.builtin.file:
+    src: /snap/bin/certbot
+    dest: /usr/bin/certbot
+    owner: root
+    group: root
+    state: link
 
 - name: Create certbot settings folder
   ansible.builtin.file:
