@@ -1,9 +1,5 @@
 # NVM Variables
-nvm_version: latest
-nvm_node_version: lts
-nvm_shell_init_file: "/etc/profile.d/nvm.sh"
-nvm_install_path: "/usr/local/nvm"
-nvm_force_install: true
+nodejs_version: "22.14.0"
 
 # Base Variables
 domain_name: "ajmosley.com"

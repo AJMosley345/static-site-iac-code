@@ -13,7 +13,10 @@ variable "domain_name" {
   description = "Domain name (i.e. google.com)"
   type        = string
 }
-
+variable "ec2_instance_ip" {
+  description = "The public ip of the EC2 instance to add to the A record in Route 53"
+  type        = string
+}
 # AWS IAM Variables (aws_iam)
 variable "iam_roles" {
   description = "List of IAM roles with policies"

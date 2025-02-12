@@ -1,8 +1,9 @@
 module "aws_dns" {
-  source      = "./modules/aws_dns"
-  domain_name = var.domain_name
-  static_ip   = var.current_static_ip
-  tags        = var.tags
+  source          = "./modules/aws_dns"
+  domain_name     = var.domain_name
+  static_ip       = var.current_static_ip
+  ec2_instance_ip = module.aws_vm.ec2_instance_ip
+  tags            = var.tags
 }
 
 module "aws_iam" {

@@ -1,47 +1,15 @@
-- name: Ensure NVM directory has correct permissions
-  ansible.builtin.file:
-    path: "{{ nvm_install_path }}"
-    state: directory
-    owner: root
-    group: root
-    mode: '0757'
-
-- name: Ensure system-wide NVM sourcing
-  ansible.builtin.blockinfile:
-    create: true
-    path: /etc/profile.d/nvm.sh
-    marker: "# NVM global config {mark}"
-    block: |
-      export NVM_DIR="{{ nvm_install_path }}"
-      [ -s "{{ nvm_install_path }}/nvm.sh" ] && \. "{{ nvm_install_path }}/nvm.sh"
-      [ -s "{{ nvm_install_path }}/bash_completion" ] && \. "{{ nvm_install_path }}/bash_completion"
-    owner: root
-    group: root
-    mode: '0755'
-
-- name: Set safe directory configuration for git
-  ansible.builtin.shell: >
-    git config --global --add safe.directory '*'
-
+---
 - name: Install nvm, node and npm
   ansible.builtin.include_role:
-    name: stephdewit.nvm
+    name: ansible-role-nvm
+  vars:
+    nodejs_version: "22.14.0"
 
-- name: Explictly install the latest version of node.js and npm
+- name: Install Gatsby CLI, yarn, and corepack
   become: true
   become_user: amosley
-  ansible.builtin.shell: |
-    nvm install --lts
-  args:
-    creates: /usr/local/nvm/versions/node
-
-- name: Install Gatsby CLI, yarn, and corepack using shell
-  become: true
-  become_user: amosley
-  ansible.builtin.shell: |
-    source /usr/local/nvm/nvm.sh
-    npm install -g {{ item }}
-  args:
-    executable: /bin/bash
+  community.general.npm:
+    name: "{{ item }}"
+    executable: "~/.nvm/versions/node/v22.14.0/bin"
   loop: "{{ repo_global_npm_packages }}"
   tags: repo-gatsby

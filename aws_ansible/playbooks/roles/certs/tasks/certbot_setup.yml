@@ -1,21 +1,19 @@
 ---
-- name: Set plugin to have classic containment, then install it
+- name: Allow Certbot to trust plugins running as root (if not set)
   ansible.builtin.shell: |
     snap set certbot trust-plugin-with-root=ok
-    snap install certbot-dns-route53
+    touch /etc/certbot_plugin_set
+  args:
+    creates: /etc/certbot_plugin_set
+
+- name: Install Certbot DNS Route53 plugin with snap module
+  community.general.snap:
+    name: certbot-dns-route53
+    state: present
 
 - name: Create aws settings folder
   ansible.builtin.file:
     path: ~/.aws
-    state: directory
-    owner: root
-    group: root
-    mode: '0700'
-
-
-- name: Create certbot settings folder
-  ansible.builtin.file:
-    path: /etc/letsencrypt/.aws
     state: directory
     owner: root
     group: root
@@ -29,6 +27,4 @@
     group: root
     mode: '0644'
   with_items:
-    # - { src: 'aws_config.j2', dest: '/etc/letsencrypt/.aws/config' }
     - { src: 'aws_config.j2', dest: '~/.aws/config' }
-    # - { src: 'letsencrypt_cli.ini.j2', dest: '/etc/letsencrypt/cli.ini' }
