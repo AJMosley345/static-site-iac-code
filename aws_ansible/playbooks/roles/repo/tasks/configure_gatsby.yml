@@ -15,6 +15,9 @@
       [ -s "{{ nvm_install_path }}/nvm.sh" ] && \. "{{ nvm_install_path }}/nvm.sh"
       [ -s "{{ nvm_install_path }}/bash_completion" ] && \. "{{ nvm_install_path }}/bash_completion"
 
+- name: Install nvm, node and npm
+  ansible.builtin.include_role: stephdewit.nvm
+
 - name: Get Installed Node.js Version Path
   ansible.builtin.shell: >
     . {{ nvm_install_path }}/nvm.sh && echo $(nvm which default | xargs dirname)
@@ -22,6 +25,7 @@
     executable: /bin/bash
   register: node_bin_path
   changed_when: false
+
 
 - name: Install Gatsby CLI, yarn and corepack
   community.general.npm:

@@ -12,8 +12,6 @@
       become_user: root
 
     # Repo and website setup
-    - role: stephdewit.nvm # Installs nvm for all users
-      tags: repo
     - role: repo
       tags: repo
       become: true
