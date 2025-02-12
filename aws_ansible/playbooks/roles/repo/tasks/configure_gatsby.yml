@@ -16,7 +16,8 @@
       [ -s "{{ nvm_install_path }}/bash_completion" ] && \. "{{ nvm_install_path }}/bash_completion"
 
 - name: Install nvm, node and npm
-  ansible.builtin.include_role: stephdewit.nvm
+  ansible.builtin.include_role:
+    name: stephdewit.nvm
 
 - name: Get Installed Node.js Version Path
   ansible.builtin.shell: >
