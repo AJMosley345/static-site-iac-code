@@ -14,11 +14,11 @@
 
 - name: Create Certbot config files
   ansible.builtin.template:
-    src: ""
-    dest: ""
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
     owner: root
     group: root
-    mode: '0600'
+    mode: '0644'
   with_items:
     - { src: 'aws_credentials.j2', dest: '/etc/letsencrypt/.aws/config' }
     - { src: 'letsencrypt_cli.ini.j2', dest: '/etc/letsencrypt/cli.ini' }
