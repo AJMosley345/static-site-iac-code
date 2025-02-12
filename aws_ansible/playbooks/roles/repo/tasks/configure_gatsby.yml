@@ -3,7 +3,9 @@
   become: true
   become_user: amosley
   ansible.builtin.shell: |
-    source ~/.bashrc && npm install --global {{ item }}
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    npm install --global {{ item }}
   args:
     executable: /bin/bash
   loop: "{{ repo_global_npm_packages }}"
