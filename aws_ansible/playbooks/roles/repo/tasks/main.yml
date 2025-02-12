@@ -1,6 +1,6 @@
 ---
 - name: Install nvm, node and npm
-  ansible.builtin.include_role: nvm.yml
+  ansible.builtin.include_tasks: nvm.yml
 
 - name: Configure Gatsby
   ansible.builtin.include_tasks: configure_gatsby.yml
