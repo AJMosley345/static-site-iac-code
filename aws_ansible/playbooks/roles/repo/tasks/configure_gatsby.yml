@@ -21,6 +21,10 @@
     group: root
     mode: '0755'
 
+- name: Set safe directory configuration for git
+  ansible.builtin.shell: >
+    git config --global --add safe.directory '*'
+
 - name: Install nvm, node and npm
   ansible.builtin.include_role:
     name: stephdewit.nvm
