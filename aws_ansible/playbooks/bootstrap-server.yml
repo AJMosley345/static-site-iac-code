@@ -15,7 +15,7 @@
     - role: repo
       tags: repo
       become: true
-      become_user: root
+      become_user: amosley
 
     # Cert and Nginx setup
     - { role: geerlingguy.certbot, certbot_certs: [] } # Just install certbot

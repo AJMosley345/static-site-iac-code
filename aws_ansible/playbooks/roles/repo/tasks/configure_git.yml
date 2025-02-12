@@ -1,5 +1,7 @@
 ---
 - name: Create directories for site and repository
+  become: true
+  become_user: root
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
@@ -11,6 +13,8 @@
   tags: repo-git
 
 - name: Initialize bare Git repository  # noqa: command-instead-of-module # Suppresses lint rule about using command module when a module is available
+  become: true
+  become_user: root
   ansible.builtin.command:
     cmd: git init --initial-branch=main --bare {{ repo_git_repo_path }}
   args:
@@ -18,6 +22,8 @@
   tags: repo-git
 
 - name: Set ownership of the Git repository
+  become: true
+  become_user: root
   ansible.builtin.file:
     path: "{{ repo_git_repo_path }}"
     state: directory
@@ -28,6 +34,8 @@
   tags: repo-git
 
 - name: Add Git post-receive hook
+  become: true
+  become_user: root
   ansible.builtin.copy:
     dest: "{{ repo_git_repo_path }}/hooks/post-receive"
     content: |

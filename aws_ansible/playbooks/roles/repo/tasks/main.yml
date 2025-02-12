@@ -1,13 +1,9 @@
 ---
 - name: Install nvm, node and npm
   ansible.builtin.include_tasks: nvm.yml
-  become: true
-  become_user: amosley
 
 - name: Configure Gatsby
   ansible.builtin.include_tasks: configure_gatsby.yml
-  become: true
-  become_user: amosley
 
 - name: Configure git repo and site path
   ansible.builtin.include_tasks: configure_git.yml
