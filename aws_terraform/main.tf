@@ -2,7 +2,7 @@ module "aws_dns" {
   source          = "./modules/aws_dns"
   domain_name     = var.domain_name
   static_ip       = var.current_static_ip
-  ec2_instance_ip = module.aws_vm.ec2_instance_ip
+  ec2_instance_ip = var.create_instance ? module.aws_vm[0].ec2_instance_ip : ""
   tags            = var.tags
 }
 
@@ -47,18 +47,21 @@ module "aws_network" {
   tags                       = var.tags
 }
 
-# module "aws_vm" {
-#   source                 = "./modules/aws_vm"
-#   bucket_name            = var.bucket_name
-#   channel_name           = var.channel_name
-#   region                 = var.region
-#   instance_type          = var.instance_type
-#   instance_name          = var.instance_name
-#   subnet_id              = module.aws_network.public_subnet_id
-#   vpc_security_group_id  = module.aws_network.security_group_id
-#   tailscale_auth_key     = var.tailscale_auth_key
-#   tags                   = var.tags
-# }
+
+
+module "aws_vm" {
+  source                 = "./modules/aws_vm"
+  count                  = var.create_instance ? 1 : 0
+  bucket_name            = var.bucket_name
+  channel_name           = var.channel_name
+  region                 = var.region
+  instance_type          = var.instance_type
+  instance_name          = var.instance_name
+  subnet_id              = module.aws_network.public_subnet_id
+  vpc_security_group_id  = module.aws_network.security_group_id
+  tailscale_auth_key     = var.tailscale_auth_key
+  tags                   = var.tags
+}
 
 module "porkbun" {
   source       = "./modules/porkbun"

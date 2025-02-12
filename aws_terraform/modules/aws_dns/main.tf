@@ -18,10 +18,7 @@ resource "aws_route53_record" "aws_webserver_record" {
   name            = var.domain_name
   type            = "A"
   ttl             = 86400
-  records         = [ 
-      var.static_ip,
-      var.ec2_instance_ip
-    ]
+  records         = compact([var.static_ip, var.ec2_instance_ip])
 }
 
 # CNAME Record for www Subdomain
