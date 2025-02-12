@@ -24,6 +24,8 @@
     git config --global --add safe.directory '*'
 
 - name: Install nvm, node and npm
+  become: true
+  become_user: amosley
   ansible.builtin.include_role:
     name: stephdewit.nvm
 
@@ -36,14 +38,18 @@
     creates: /usr/local/nvm/versions/node
 
 - name: Get Installed Node.js Version Path
+  become: true
+  become_user: amosley
   ansible.builtin.shell: >
-    . {{ nvm_install_path }}/nvm.sh && echo $(nvm which default | xargs dirname)
+    echo $(which npm | xargs dirname)
   args:
     executable: /bin/bash
   register: node_bin_path
   changed_when: false
 
 - name: Install Gatsby CLI, yarn and corepack
+  become: true
+  become_user: amosley
   community.general.npm:
     name: "{{ item }}"
     global: true
