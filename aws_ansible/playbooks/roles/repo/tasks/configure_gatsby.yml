@@ -1,10 +1,4 @@
 ---
-- name: Install nvm, node and npm
-  ansible.builtin.include_role:
-    name: ansible-role-nvm
-  vars:
-    nodejs_version: "22.14.0"
-
 - name: Install Gatsby CLI, yarn, and corepack globally
   become: true
   become_user: amosley
