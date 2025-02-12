@@ -1,3 +1,7 @@
+# NVM Variables
+nvm_version: 'latest'
+nvm_node_version: 'lts'
+
 # Base Variables
 domain_name: "ajmosley.com"
 letsencrypt_cert_path: /etc/letsencrypt/live/{{ domain_name }}
