@@ -15,6 +15,9 @@
       export NVM_DIR="{{ nvm_install_path }}"
       [ -s "{{ nvm_install_path }}/nvm.sh" ] && \. "{{ nvm_install_path }}/nvm.sh"
       [ -s "{{ nvm_install_path }}/bash_completion" ] && \. "{{ nvm_install_path }}/bash_completion"
+    owner: root
+    group: root
+    mode: '0755'
 
 - name: Install nvm, node and npm
   ansible.builtin.include_role:
