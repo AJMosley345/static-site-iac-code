@@ -7,8 +7,8 @@
     - vars/main-vars.yml
 
   roles:
-    - role: common
-      tags: common
+    # - role: common
+    #   tags: common
     - role: repo
       tags: repo
     - role: geerlingguy.pip
