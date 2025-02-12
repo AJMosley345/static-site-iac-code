@@ -29,12 +29,11 @@
 
 - name: Get Installed Node.js Version Path
   ansible.builtin.shell: >
-    . {{ nvm_install_path }}/nvm.sh && echo $(nvm which default | xargs dirname)
+    . {{ nvm_install_path }}/nvm.sh && echo $(nvm which  default | xargs dirname)
   args:
     executable: /bin/bash
   register: node_bin_path
   changed_when: false
-
 
 - name: Install Gatsby CLI, yarn and corepack
   community.general.npm:
